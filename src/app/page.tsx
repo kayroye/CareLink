@@ -31,7 +31,7 @@ export default function Home() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="flex flex-col items-center gap-4">
-        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center shadow-lg">
+        <div className="w-16 h-16 rounded-xl bg-linear-to-br from-teal-400 to-teal-600 flex items-center justify-center shadow-lg">
           <span className="text-white text-2xl font-bold">R</span>
         </div>
         <Loader2 className="h-6 w-6 animate-spin text-accent" />

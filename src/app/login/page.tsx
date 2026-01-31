@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { MountainRidge } from '@/components/ui/mountain-ridge';
 import { useAuth } from '@/contexts/AuthContext';
-import { User, Stethoscope, Mail, Lock, Loader2, CheckCircle } from 'lucide-react';
+import { User, Stethoscope, Mail, Loader2, CheckCircle } from 'lucide-react';
+import { Label } from '@/components/ui/label';
 
 type RoleSelection = 'patient' | 'nurse' | null;
 
@@ -112,7 +113,7 @@ export default function LoginPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Patient Card */}
-              <button
+              <Button
                 onClick={() => setSelectedRole('patient')}
                 className="group p-6 bg-card rounded-xl border-2 border-border/80 hover:border-accent hover:shadow-lg transition-all duration-200 text-left"
               >
@@ -123,10 +124,10 @@ export default function LoginPage() {
                 <p className="text-sm text-foreground/70">
                   Access your referrals and appointments with a secure magic link
                 </p>
-              </button>
+              </Button>
 
               {/* Healthcare Provider Card */}
-              <button
+              <Button
                 onClick={() => setSelectedRole('nurse')}
                 className="group p-6 bg-card rounded-xl border-2 border-border/80 hover:border-accent hover:shadow-lg transition-all duration-200 text-left"
               >
@@ -137,7 +138,7 @@ export default function LoginPage() {
                 <p className="text-sm text-foreground/70">
                   Manage patient referrals and coordinate care
                 </p>
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -145,12 +146,12 @@ export default function LoginPage() {
         {/* Patient Login Form */}
         {selectedRole === 'patient' && !magicLinkSent && (
           <div className="w-full max-w-md">
-            <button
+            <Button
               onClick={() => setSelectedRole(null)}
               className="text-sm text-foreground/70 hover:text-foreground mb-6 flex items-center gap-1"
             >
               <span>&larr;</span> Back to role selection
-            </button>
+            </Button>
 
             <div className="bg-card rounded-xl border border-border shadow-sm p-8">
               <div className="flex items-center gap-3 mb-6">
@@ -166,22 +167,19 @@ export default function LoginPage() {
 
               <form onSubmit={handlePatientLogin} className="space-y-4">
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1.5">
+                  <Label htmlFor="email">
                     Email Address
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                    <Input
-                      id="email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="you@example.com"
-                      className="pl-10 h-11"
-                      required
-                      disabled={loading}
-                    />
-                  </div>
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="pl-10 h-11"
+                    required
+                    disabled={loading}
+                  />
                 </div>
 
                 {error && (
@@ -257,12 +255,12 @@ export default function LoginPage() {
         {/* Nurse Login Form */}
         {selectedRole === 'nurse' && (
           <div className="w-full max-w-md">
-            <button
+            <Button
               onClick={() => setSelectedRole(null)}
               className="text-sm text-foreground/70 hover:text-foreground mb-6 flex items-center gap-1"
             >
               <span>&larr;</span> Back to role selection
-            </button>
+            </Button>
 
             <div className="bg-card rounded-xl border border-border shadow-sm p-8">
               <div className="flex items-center gap-3 mb-6">
@@ -274,41 +272,35 @@ export default function LoginPage() {
 
               <form onSubmit={handleNurseLogin} className="space-y-4">
                 <div>
-                  <label htmlFor="nurse-email" className="block text-sm font-medium text-foreground mb-1.5">
+                  <Label htmlFor="nurse-email">
                     Email Address
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                    <Input
-                      id="nurse-email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="you@referralloop.com"
-                      className="pl-10 h-11"
-                      required
-                      disabled={loading}
-                    />
-                  </div>
+                  </Label>
+                  <Input
+                    id="nurse-email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@referralloop.com"
+                    className="pl-10 h-11"
+                    required
+                    disabled={loading}
+                  />
                 </div>
 
                 <div>
-                  <label htmlFor="password" className="block text-sm font-medium text-foreground mb-1.5">
+                  <Label htmlFor="password">
                     Password
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                    <Input
-                      id="password"
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="Enter your password"
-                      className="pl-10 h-11"
-                      required
-                      disabled={loading}
-                    />
-                  </div>
+                  </Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter your password"
+                    className="pl-10 h-11"
+                    required
+                    disabled={loading}
+                  />
                 </div>
 
                 {error && (
