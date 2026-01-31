@@ -3,7 +3,7 @@
 import { useEffect, useState, use } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { AlertTriangle, Clock } from 'lucide-react';
+import { AlertTriangle, Clock, Loader2 } from 'lucide-react';
 
 interface WalletData {
   n: string;
@@ -23,10 +23,10 @@ export default function WalletPage({ params }: { params: Promise<{ data: string 
   useEffect(() => {
     try {
       const decoded = JSON.parse(atob(data));
-      setWalletData(decoded);
-      setIsExpired(Date.now() > decoded.e);
-    } catch (e) {
-      setError('Invalid wallet data');
+      setTimeout(() => setWalletData(decoded), 0);
+      setTimeout(() => setIsExpired(Date.now() > decoded.e), 0);
+    } catch {
+      setTimeout(() => setError('Invalid wallet data'), 0);
     }
   }, [data]);
 
@@ -66,8 +66,9 @@ export default function WalletPage({ params }: { params: Promise<{ data: string 
 
   if (!walletData) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p>Loading...</p>
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+        <Loader2 className="h-6 w-6 animate-spin text-accent" />
+        <p className="text-lg text-muted-foreground">Loading your wallet...</p>
       </div>
     );
   }

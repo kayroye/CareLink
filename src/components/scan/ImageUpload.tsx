@@ -5,9 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Camera, Upload, X, Loader2 } from 'lucide-react';
 import { useNetwork } from '@/contexts/NetworkContext';
+import Image from 'next/image';
 
 interface ImageUploadProps {
-  onOcrComplete: (data: any) => void;
+  onOcrComplete: (data: { name: string; diagnosis: string; facility: string }) => void;
   onError: (error: string) => void;
 }
 
@@ -114,10 +115,12 @@ export function ImageUpload({ onOcrComplete, onError }: ImageUploadProps) {
         ) : (
           <div className="space-y-4">
             <div className="relative">
-              <img
+              <Image
                 src={image}
                 alt="Uploaded referral form"
                 className="max-h-64 w-full rounded-lg object-contain"
+                width={100}
+                height={100}
               />
               <Button
                 variant="destructive"

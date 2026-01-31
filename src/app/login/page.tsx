@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { MountainRidge } from '@/components/ui/mountain-ridge';
 import { useAuth } from '@/contexts/AuthContext';
-import { User, Stethoscope, Mail, Lock, Loader2, CheckCircle } from 'lucide-react';
+import { User, Stethoscope, Mail, Loader2, CheckCircle } from 'lucide-react';
+import { Label } from '@/components/ui/label';
 
 type RoleSelection = 'patient' | 'nurse' | null;
 
@@ -112,32 +113,34 @@ export default function LoginPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Patient Card */}
-              <button
+              <Button
+                variant="outline"
                 onClick={() => setSelectedRole('patient')}
-                className="group p-6 bg-card rounded-xl border-2 border-border/80 hover:border-accent hover:shadow-lg transition-all duration-200 text-left"
+                className="group h-auto! flex-col! items-start! justify-start! whitespace-normal! p-6 bg-card rounded-xl border-2 border-border/80 hover:border-accent hover:shadow-lg transition-all duration-200 text-left w-full"
               >
-                <div className="w-14 h-14 rounded-lg bg-scheduled-muted flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
-                  <User className="h-7 w-7 text-accent" />
+                <div className="w-14 h-14 rounded-lg bg-secondary flex items-center justify-center mb-4 group-hover:bg-secondary/80 transition-colors">
+                  <User className="h-7 w-7 text-foreground/70" />
                 </div>
-                <h3 className="heading-5 text-foreground mb-2">I&apos;m a Patient</h3>
-                <p className="text-sm text-foreground/70">
+                <h3 className="heading-5 text-foreground mb-2 whitespace-normal">I&apos;m a Patient</h3>
+                <p className="text-sm text-foreground/70 whitespace-normal w-full">
                   Access your referrals and appointments with a secure magic link
                 </p>
-              </button>
+              </Button>
 
               {/* Healthcare Provider Card */}
-              <button
+              <Button
+                variant="outline"
                 onClick={() => setSelectedRole('nurse')}
-                className="group p-6 bg-card rounded-xl border-2 border-border/80 hover:border-accent hover:shadow-lg transition-all duration-200 text-left"
+                className="group h-auto! flex-col! items-start! justify-start! whitespace-normal! p-6 bg-card rounded-xl border-2 border-border/80 hover:border-accent hover:shadow-lg transition-all duration-200 text-left w-full"
               >
                 <div className="w-14 h-14 rounded-lg bg-secondary flex items-center justify-center mb-4 group-hover:bg-secondary/80 transition-colors">
                   <Stethoscope className="h-7 w-7 text-foreground/70" />
                 </div>
-                <h3 className="heading-5 text-foreground mb-2">I&apos;m a Healthcare Provider</h3>
-                <p className="text-sm text-foreground/70">
+                <h3 className="heading-5 text-foreground mb-2 whitespace-normal">I&apos;m a Healthcare Provider</h3>
+                <p className="text-sm text-foreground/70 whitespace-normal w-full">
                   Manage patient referrals and coordinate care
                 </p>
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -145,43 +148,41 @@ export default function LoginPage() {
         {/* Patient Login Form */}
         {selectedRole === 'patient' && !magicLinkSent && (
           <div className="w-full max-w-md">
-            <button
+            <Button
+              variant="ghost"
               onClick={() => setSelectedRole(null)}
-              className="text-sm text-foreground/70 hover:text-foreground mb-6 flex items-center gap-1"
+              className="text-sm text-foreground/70 hover:text-foreground mb-8 h-auto! p-2!"
             >
               <span>&larr;</span> Back to role selection
-            </button>
+            </Button>
 
             <div className="bg-card rounded-xl border border-border shadow-sm p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-lg bg-scheduled-muted flex items-center justify-center">
-                  <User className="h-5 w-5 text-accent" />
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
+                  <User className="h-5 w-5 text-foreground/70" />
                 </div>
                 <h2 className="heading-4 text-foreground">Patient Sign In</h2>
               </div>
 
-              <p className="text-foreground/70 mb-6">
+              <p className="text-foreground/70 mb-8 text-sm">
                 Enter your email address and we&apos;ll send you a secure link to access your portal.
               </p>
 
-              <form onSubmit={handlePatientLogin} className="space-y-4">
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1.5">
+              <form onSubmit={handlePatientLogin} className="space-y-5">
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-sm font-medium">
                     Email Address
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                    <Input
-                      id="email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="you@example.com"
-                      className="pl-10 h-11"
-                      required
-                      disabled={loading}
-                    />
-                  </div>
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="h-11"
+                    required
+                    disabled={loading}
+                  />
                 </div>
 
                 {error && (
@@ -192,7 +193,7 @@ export default function LoginPage() {
 
                 <Button
                   type="submit"
-                  className="w-full h-11"
+                  className="w-full h-11 mt-6"
                   disabled={loading || !email}
                 >
                   {loading ? (
@@ -216,23 +217,23 @@ export default function LoginPage() {
         {selectedRole === 'patient' && magicLinkSent && (
           <div className="w-full max-w-md">
             <div className="bg-card rounded-xl border border-border shadow-sm p-8 text-center">
-              <div className="w-16 h-16 rounded-full bg-scheduled-muted flex items-center justify-center mx-auto mb-6">
-                <CheckCircle className="h-8 w-8 text-accent" />
+              <div className="w-16 h-16 rounded-full bg-secondary flex items-center justify-center mx-auto mb-6">
+                <CheckCircle className="h-8 w-8 text-accent dark:text-foreground" />
               </div>
 
               <h2 className="heading-4 text-foreground mb-3">Check Your Email</h2>
-              <p className="text-muted-foreground mb-6">
-                We&apos;ve sent a secure login link to <strong>{email}</strong>.
+              <p className="text-foreground/70 mb-6">
+                We&apos;ve sent a secure login link to <strong className="text-foreground">{email}</strong>.
                 Click the link to access your patient portal.
               </p>
 
               {/* Demo mode: show the magic link */}
               {magicLinkUrl && (
-                <div className="p-4 bg-pending-muted border border-pending-muted rounded-lg mb-6">
-                  <p className="text-sm text-pending-foreground font-medium mb-2">Demo Mode</p>
+                <div className="p-4 bg-secondary border-2 border-secondary/30 rounded-lg mb-6">
+                  <p className="text-sm text-foreground font-medium mb-2">Demo Mode</p>
                   <a
                     href={magicLinkUrl}
-                    className="text-sm text-accent hover:text-accent/80 underline break-all"
+                    className="text-sm text-accent dark:text-foreground hover:text-accent/80 dark:hover:text-foreground underline break-all font-medium"
                   >
                     Click here to sign in
                   </a>
@@ -246,7 +247,7 @@ export default function LoginPage() {
                   setMagicLinkUrl(null);
                   setSelectedRole(null);
                 }}
-                className="w-full"
+                className="w-full h-11"
               >
                 Back to Login
               </Button>
@@ -257,58 +258,53 @@ export default function LoginPage() {
         {/* Nurse Login Form */}
         {selectedRole === 'nurse' && (
           <div className="w-full max-w-md">
-            <button
+            <Button
+              variant="ghost"
               onClick={() => setSelectedRole(null)}
-              className="text-sm text-foreground/70 hover:text-foreground mb-6 flex items-center gap-1"
+              className="text-sm text-foreground/70 hover:text-foreground mb-8 h-auto! p-2!"
             >
               <span>&larr;</span> Back to role selection
-            </button>
+            </Button>
 
             <div className="bg-card rounded-xl border border-border shadow-sm p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
-                  <Stethoscope className="h-5 w-5 text-muted-foreground" />
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
+                  <Stethoscope className="h-5 w-5 text-foreground/70" />
                 </div>
                 <h2 className="heading-4 text-foreground">Provider Sign In</h2>
               </div>
 
-              <form onSubmit={handleNurseLogin} className="space-y-4">
-                <div>
-                  <label htmlFor="nurse-email" className="block text-sm font-medium text-foreground mb-1.5">
+              <form onSubmit={handleNurseLogin} className="space-y-5">
+                <div className="space-y-2">
+                  <Label htmlFor="nurse-email" className="text-sm font-medium">
                     Email Address
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                    <Input
-                      id="nurse-email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="you@referralloop.com"
-                      className="pl-10 h-11"
-                      required
-                      disabled={loading}
-                    />
-                  </div>
+                  </Label>
+                  <Input
+                    id="nurse-email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@referralloop.com"
+                    className="h-11"
+                    required
+                    disabled={loading}
+                  />
                 </div>
 
-                <div>
-                  <label htmlFor="password" className="block text-sm font-medium text-foreground mb-1.5">
+                <div className="space-y-2">
+                  <Label htmlFor="password" className="text-sm font-medium">
                     Password
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                    <Input
-                      id="password"
-                      type="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="Enter your password"
-                      className="pl-10 h-11"
-                      required
-                      disabled={loading}
-                    />
-                  </div>
+                  </Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter your password"
+                    className="h-11"
+                    required
+                    disabled={loading}
+                  />
                 </div>
 
                 {error && (
@@ -320,7 +316,7 @@ export default function LoginPage() {
                 <Button
                   type="submit"
                   variant="primary"
-                  className="w-full h-11"
+                  className="w-full h-11 mt-6"
                   disabled={loading || !email || !password}
                 >
                   {loading ? (

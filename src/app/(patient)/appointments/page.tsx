@@ -15,11 +15,11 @@ import {
 import { Button } from '@/components/ui/button';
 
 export default function AppointmentsPage() {
-  const { referrals, loading, updateReferral } = useReferrals();
+  const { referrals, loading } = useReferrals();
   const [confirmationOpen, setConfirmationOpen] = useState(false);
-  const [confirmedAppointment, setConfirmedAppointment] = useState<string | null>(null);
+  const [, setConfirmedAppointment] = useState<string | null>(null);
   const [rescheduleModalOpen, setRescheduleModalOpen] = useState(false);
-  const [selectedReferralId, setSelectedReferralId] = useState<string | null>(null);
+  const [, setSelectedReferralId] = useState<string | null>(null);
 
   // Filter to only scheduled referrals with appointment dates
   const scheduledAppointments = referrals.filter(

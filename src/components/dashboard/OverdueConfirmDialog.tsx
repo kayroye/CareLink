@@ -62,43 +62,44 @@ export function OverdueConfirmDialog({
       <DialogContent showCloseButton={false}>
         <DialogHeader>
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-pending-muted">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pending-muted">
               <AlertTriangle className="h-5 w-5 text-pending-foreground" />
             </div>
             <DialogTitle className="text-lg font-semibold">
               Moving Overdue Referral
             </DialogTitle>
           </div>
-          <DialogDescription className="pt-2">
+          <DialogDescription className="pt-3 text-sm leading-relaxed">
             This referral requires a note explaining the status change because it is overdue.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 py-2">
-          <div className="rounded-lg border border-pending bg-pending-muted p-4">
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
+        <div className="space-y-5 py-4">
+          <div className="rounded-lg border border-pending bg-pending-muted p-5">
+            <div className="space-y-3">
+              <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-3 text-sm">
                 <span className="text-muted-foreground">Patient</span>
-                <span className="font-medium">{referral.patientName}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Diagnosis</span>
-                <span className="font-medium">{referral.diagnosis}</span>
-              </div>
-              <div className="flex justify-between text-sm">
+                <span className="font-medium text-right">{referral.patientName}</span>
+                
                 <span className="text-muted-foreground">Days Overdue</span>
-                <span className="font-semibold text-missed-foreground">
+                <span className="font-semibold text-missed-foreground text-right">
                   {daysOverdue} {daysOverdue === 1 ? 'day' : 'days'}
                 </span>
-              </div>
-              <div className="flex justify-between text-sm">
+                
                 <span className="text-muted-foreground">Moving to</span>
-                <span className="font-medium capitalize">{newStatus}</span>
+                <span className="font-medium capitalize text-right">{newStatus}</span>
+              </div>
+              
+              <div className="space-y-1.5 pt-1">
+                <div className="text-xs text-muted-foreground">Diagnosis</div>
+                <div className="text-sm font-medium leading-relaxed">
+                  {referral.diagnosis}
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             <label htmlFor="status-change-note" className="text-sm font-medium">
               Status Change Note <span className="text-destructive">*</span>
             </label>
@@ -107,12 +108,12 @@ export function OverdueConfirmDialog({
               placeholder="Please explain why this overdue referral is being moved (min. 10 characters)..."
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              className="min-h-[100px] resize-none"
+              className="min-h-[120px] resize-none"
             />
             <p className="text-xs text-muted-foreground">
               {note.trim().length}/10 characters minimum
               {!isNoteValid && note.trim().length > 0 && (
-                <span className="text-destructive ml-2">
+                <span className="ml-2 text-destructive">
                   ({10 - note.trim().length} more needed)
                 </span>
               )}

@@ -26,7 +26,7 @@ export default function SettingsPage() {
 
   // Avoid hydration mismatch for theme
   useEffect(() => {
-    setMounted(true);
+    setTimeout(() => setMounted(true), 0);
   }, []);
 
   // Load settings from localStorage on mount
@@ -35,10 +35,10 @@ export default function SettingsPage() {
     const savedSmsReminders = localStorage.getItem('patientSmsReminders');
 
     if (savedTextSize) {
-      setTextSize(savedTextSize);
+      setTimeout(() => setTextSize(savedTextSize), 0);
     }
     if (savedSmsReminders !== null) {
-      setSmsReminders(savedSmsReminders === 'true');
+      setTimeout(() => setSmsReminders(savedSmsReminders === 'true'), 0);
     }
   }, []);
 
@@ -172,7 +172,7 @@ export default function SettingsPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           {TEXT_SIZE_OPTIONS.map((option) => (
-            <button
+            <Button
               key={option.value}
               onClick={() => handleTextSizeChange(option.value)}
               className={cn(
@@ -215,7 +215,7 @@ export default function SettingsPage() {
                   This is how your text will look.
                 </p>
               </div>
-            </button>
+            </Button>
           ))}
         </CardContent>
       </Card>
