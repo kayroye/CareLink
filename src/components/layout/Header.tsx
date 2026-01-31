@@ -4,9 +4,8 @@ import { useState } from 'react';
 import { useNetwork } from '@/contexts/NetworkContext';
 import { useReferrals } from '@/lib/db/hooks';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
-import { Wifi, WifiOff, RefreshCw } from 'lucide-react';
+import { Wifi, WifiOff, RefreshCw, CloudOff } from 'lucide-react';
 
 export function Header() {
   const { isOnline, toggleNetwork } = useNetwork();
@@ -25,22 +24,35 @@ export function Header() {
   };
 
   return (
-    <header className={`sticky top-0 z-50 border-b px-4 py-3 ${isOnline ? 'bg-white' : 'bg-gray-50'}`}>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <h1 className="text-xl font-bold" style={{ color: 'hsl(199 89% 48%)' }}>ReferralLoop</h1>
+    <header className={`sticky top-0 z-50 border-b px-4 py-3.5 transition-colors duration-300 ${
+      isOnline ? 'header-glass' : 'header-glass-offline border-amber-200'
+    }`}>
+      <div className="flex items-center justify-between max-w-7xl mx-auto">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-400 to-sky-600 flex items-center justify-center shadow-sm">
+              <span className="text-white text-sm font-bold">R</span>
+            </div>
+            <h1 className="text-lg font-bold tracking-tight bg-gradient-to-r from-sky-600 to-sky-500 bg-clip-text text-transparent">
+              ReferralLoop
+            </h1>
+          </div>
           {!isOnline && (
-            <Badge variant="secondary" className="bg-amber-100 text-amber-800">
-              Offline Mode
-            </Badge>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 border border-amber-200">
+              <CloudOff className="h-3.5 w-3.5 text-amber-600" />
+              <span className="text-xs font-medium text-amber-700">Offline</span>
+            </div>
           )}
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           {unsyncedCount > 0 && (
-            <Badge variant="outline" className="text-gray-500">
-              {unsyncedCount} pending sync
-            </Badge>
+            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sky-50 border border-sky-100">
+              <div className="w-1.5 h-1.5 rounded-full bg-sky-500 sync-pulse" />
+              <span className="text-xs font-medium text-sky-700">
+                {unsyncedCount} pending
+              </span>
+            </div>
           )}
 
           <Button
@@ -48,18 +60,29 @@ export function Header() {
             size="sm"
             onClick={handleSync}
             disabled={!isOnline || unsyncedCount === 0 || isSyncing}
+            className={`
+              transition-all duration-200
+              ${isSyncing ? 'bg-sky-50 border-sky-200' : ''}
+              ${unsyncedCount > 0 && isOnline ? 'border-sky-300 hover:bg-sky-50 hover:border-sky-400' : ''}
+            `}
           >
-            <RefreshCw className={`mr-2 h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} />
-            {isSyncing ? 'Syncing...' : 'Sync'}
+            <RefreshCw className={`mr-1.5 h-3.5 w-3.5 ${isSyncing ? 'animate-spin text-sky-600' : ''}`} />
+            <span className="text-sm">{isSyncing ? 'Syncing...' : 'Sync'}</span>
           </Button>
 
-          <div className="flex items-center gap-2">
-            {isOnline ? (
-              <Wifi className="h-4 w-4 text-green-600" />
-            ) : (
-              <WifiOff className="h-4 w-4 text-gray-400" />
-            )}
-            <Switch checked={isOnline} onCheckedChange={toggleNetwork} />
+          <div className="flex items-center gap-2 pl-2 border-l border-gray-200">
+            <div className={`p-1.5 rounded-full transition-colors ${isOnline ? 'bg-emerald-50' : 'bg-gray-100'}`}>
+              {isOnline ? (
+                <Wifi className="h-4 w-4 text-emerald-500" />
+              ) : (
+                <WifiOff className="h-4 w-4 text-gray-400" />
+              )}
+            </div>
+            <Switch
+              checked={isOnline}
+              onCheckedChange={toggleNetwork}
+              className="data-[state=checked]:bg-emerald-500"
+            />
           </div>
         </div>
       </div>

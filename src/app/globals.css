@@ -1,26 +1,34 @@
 @import "tailwindcss";
 
 :root {
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
+  --background: 210 20% 98%;
+  --foreground: 215 25% 15%;
   --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
+  --card-foreground: 215 25% 15%;
   --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
-  --primary: 199 89% 48%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222.2 47.4% 11.2%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 199 89% 48%;
-  --radius: 0.5rem;
+  --popover-foreground: 215 25% 15%;
+  --primary: 199 89% 42%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 25% 95%;
+  --secondary-foreground: 215 25% 25%;
+  --muted: 210 20% 96%;
+  --muted-foreground: 215 15% 50%;
+  --accent: 199 70% 94%;
+  --accent-foreground: 199 89% 30%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 214 20% 90%;
+  --input: 214 20% 90%;
+  --ring: 199 89% 42%;
+  --radius: 0.625rem;
+
+  /* Custom healthcare colors */
+  --success: 152 69% 40%;
+  --warning: 38 92% 50%;
+  --pending: 38 92% 50%;
+  --scheduled: 199 89% 42%;
+  --completed: 152 69% 40%;
+  --missed: 0 72% 51%;
 }
 
 * {
@@ -28,6 +36,148 @@
 }
 
 body {
-  background-color: hsl(var(--background));
+  background: linear-gradient(135deg, hsl(210 30% 98%) 0%, hsl(199 30% 96%) 100%);
   color: hsl(var(--foreground));
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Refined card styles */
+.card-elevated {
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-elevated:hover {
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+/* Overdue card pulse animation */
+.card-overdue {
+  animation: overdue-pulse 2s ease-in-out infinite;
+}
+
+@keyframes overdue-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 0 rgba(239, 68, 68, 0),
+      0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+  50% {
+    box-shadow:
+      0 0 0 4px rgba(239, 68, 68, 0.1),
+      0 4px 12px rgba(239, 68, 68, 0.15);
+  }
+}
+
+/* Sync animation */
+.sync-pulse {
+  animation: sync-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes sync-glow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Status indicator dot */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: status-pulse 2s ease-in-out infinite;
+}
+
+@keyframes status-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+}
+
+/* Kanban column header gradient */
+.column-header-pending {
+  background: linear-gradient(135deg, hsl(38 92% 95%) 0%, hsl(38 80% 90%) 100%);
+}
+
+.column-header-scheduled {
+  background: linear-gradient(135deg, hsl(199 70% 95%) 0%, hsl(199 60% 90%) 100%);
+}
+
+.column-header-completed {
+  background: linear-gradient(135deg, hsl(152 50% 95%) 0%, hsl(152 40% 90%) 100%);
+}
+
+.column-header-missed {
+  background: linear-gradient(135deg, hsl(0 70% 96%) 0%, hsl(0 60% 92%) 100%);
+}
+
+/* Smooth scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
+
+/* Header glass effect */
+.header-glass {
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.header-glass-offline {
+  backdrop-filter: blur(12px);
+  background: rgba(251, 191, 36, 0.08);
+}
+
+/* Badge refinements */
+.badge-critical {
+  background: linear-gradient(135deg, hsl(0 84% 60%) 0%, hsl(0 72% 51%) 100%);
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.badge-high {
+  background: linear-gradient(135deg, hsl(25 95% 53%) 0%, hsl(21 90% 48%) 100%);
+  color: white;
+  font-weight: 500;
+}
+
+.badge-medium {
+  background: hsl(199 70% 94%);
+  color: hsl(199 89% 30%);
+  font-weight: 500;
+}
+
+.badge-low {
+  background: hsl(210 20% 94%);
+  color: hsl(215 15% 45%);
+  font-weight: 500;
 }
