@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import type { LucideIcon } from 'lucide-react';
@@ -75,14 +76,14 @@ export function AppSidebar({ navItems: navItemsProp }: SidebarProps) {
   return (
     <ShadcnSidebar collapsible="icon">
       <SidebarHeader>
-        <div className="flex items-center justify-between px-2 py-2">
-          <div className="flex items-center gap-2">
-            {/* Show logo in expanded state, trigger button in collapsed state */}
-            <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center shadow-sm shrink-0 group-data-[collapsible=icon]:hidden">
-              <span className="text-white text-sm font-bold">R</span>
-            </div>
-            <div className="hidden group-data-[collapsible=icon]:block">
-              <SidebarTrigger />
+        <div className="flex items-center justify-between px-2 py-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0">
+          <div className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
+            {/* Logo stays visible; trigger appears on hover when collapsed */}
+            <div className="relative group/logo w-8 h-8 rounded-lg bg-secondary flex items-center justify-center shadow-sm shrink-0 overflow-hidden">
+              <Image className="p-1" src="/icon.png" alt="ReferralLoop logo" width={32} height={32} />
+              <SidebarTrigger
+                className="absolute inset-0 hidden group-data-[collapsible=icon]:flex opacity-0 transition-opacity group-hover/logo:opacity-100 bg-sidebar-accent/80"
+              />
             </div>
             <span className="text-lg font-bold text-sidebar-foreground group-data-[collapsible=icon]:hidden">
               ReferralLoop
@@ -173,9 +174,9 @@ export function AppSidebar({ navItems: navItemsProp }: SidebarProps) {
 
       <SidebarFooter>
         {/* User Info */}
-        <SidebarMenu>
+        <SidebarMenu className="group-data-[collapsible=icon]:items-center">
           <SidebarMenuItem>
-            <div className="flex items-center gap-2 px-2 py-2">
+            <div className="flex items-center gap-2 px-2 py-2 group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:justify-center">
               <div className="w-8 h-8 rounded-full bg-sidebar-accent flex items-center justify-center shrink-0">
                 <User className="h-4 w-4" />
               </div>

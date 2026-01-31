@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Calendar, FileText, Loader2, Phone, Settings } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { AppSidebar } from '@/components/layout/Sidebar';
@@ -67,8 +68,8 @@ export default function PatientLayout({
             <div className="px-4 py-3 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Link href="/my-referrals" className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-linear-to-br from-teal-500 to-teal-600 flex items-center justify-center shadow-sm">
-                    <span className="text-white text-base font-bold">R</span>
+                  <div className="w-9 h-9 rounded-lg bg-linear-to-br from-teal-500 to-teal-600 flex items-center justify-center shadow-sm overflow-hidden">
+                    <Image src="/icon.png" alt="ReferralLoop logo" width={36} height={36} />
                   </div>
                   <span className="text-base font-bold text-slate-800 dark:text-slate-100">
                     ReferralLoop

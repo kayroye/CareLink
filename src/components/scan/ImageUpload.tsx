@@ -6,9 +6,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Camera, Upload, X, Loader2 } from 'lucide-react';
 import { useNetwork } from '@/contexts/NetworkContext';
 import Image from 'next/image';
+import type { ScanFormOcrData } from './scanFormSchema';
 
 interface ImageUploadProps {
-  onOcrComplete: (data: { name: string; diagnosis: string; facility: string }) => void;
+  onOcrComplete: (data: ScanFormOcrData) => void;
   onError: (error: string) => void;
 }
 
@@ -67,9 +68,11 @@ export function ImageUpload({ onOcrComplete, onError }: ImageUploadProps) {
     <Card>
       <CardContent className="p-4">
         {!isOnline && (
-          <div className="mb-4 rounded-lg bg-amber-50 p-3 text-amber-800">
+          <div className="mb-4 rounded-lg bg-muted p-3 text-foreground">
             <p className="text-sm font-medium">OCR unavailable offline</p>
-            <p className="text-sm">Please enter referral details manually below.</p>
+            <p className="text-sm text-muted-foreground">
+              Please enter referral details manually below.
+            </p>
           </div>
         )}
 
@@ -106,7 +109,7 @@ export function ImageUpload({ onOcrComplete, onError }: ImageUploadProps) {
               onChange={handleFileSelect}
               className="hidden"
             />
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-muted-foreground">
               {isOnline
                 ? 'Upload or photograph a referral form to auto-fill details'
                 : 'Connect to network to enable OCR scanning'}
@@ -132,7 +135,7 @@ export function ImageUpload({ onOcrComplete, onError }: ImageUploadProps) {
               </Button>
             </div>
             {isProcessing && (
-              <div className="flex items-center justify-center gap-2 text-gray-500">
+              <div className="flex items-center justify-center gap-2 text-muted-foreground">
                 <Loader2 className="h-4 w-4 animate-spin" />
                 <span>Processing image with AI...</span>
               </div>

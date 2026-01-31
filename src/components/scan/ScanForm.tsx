@@ -1,54 +1,40 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useReferrals } from '@/lib/db/hooks';
-import { FACILITIES, Priority, FacilityId } from '@/lib/db/schema';
+import { FACILITIES, FacilityId, Priority } from '@/lib/db/schema';
 import { ImageUpload } from './ImageUpload';
 import { toast } from 'sonner';
-
-interface FormData {
-  patientName: string;
-  patientPhone: string;
-  diagnosis: string;
-  priority: Priority;
-  facilityId: FacilityId;
-  referralType: string;
-  notes: string;
-}
+import { scanFormDefaults, scanFormSchema, ScanFormData, ScanFormOcrData } from './scanFormSchema';
 
 export function ScanForm() {
   const router = useRouter();
   const { addReferral } = useReferrals();
-  const [selectedFacility, setSelectedFacility] = useState<string>('');
 
-  const { register, handleSubmit, setValue, watch, formState: { errors, isSubmitting } } = useForm<FormData>({
-    defaultValues: {
-      patientName: '',
-      patientPhone: '',
-      diagnosis: '',
-      priority: 'medium',
-      facilityId: '' as FacilityId,
-      referralType: '',
-      notes: '',
-    },
+  const form = useForm<ScanFormData>({
+    defaultValues: scanFormDefaults,
+    resolver: zodResolver(scanFormSchema),
+    mode: 'onBlur',
   });
 
-  const facility = FACILITIES.find((f) => f.id === selectedFacility);
+  const facilityId = form.watch('facilityId');
+  const facility = FACILITIES.find((f) => f.id === facilityId);
 
-  const handleOcrComplete = (data: any) => {
-    if (data.patientName) setValue('patientName', data.patientName);
-    if (data.diagnosis) setValue('diagnosis', data.diagnosis);
-    if (data.priority) setValue('priority', data.priority);
-    if (data.referralType) setValue('referralType', data.referralType);
-    if (data.notes) setValue('notes', data.notes);
+  const handleOcrComplete = (data: ScanFormOcrData) => {
+    if (data.patientName) form.setValue('patientName', data.patientName, { shouldValidate: true });
+    if (data.diagnosis) form.setValue('diagnosis', data.diagnosis, { shouldValidate: true });
+    if (data.priority) form.setValue('priority', data.priority as Priority, { shouldValidate: true });
+    if (data.referralType) form.setValue('referralType', data.referralType, { shouldValidate: true });
+    if (data.notes) form.setValue('notes', data.notes, { shouldValidate: false });
 
     toast.success('Form auto-filled from OCR. Please verify and complete.');
   };
@@ -57,9 +43,9 @@ export function ScanForm() {
     toast.error(error);
   };
 
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const formatPhoneNumber = useCallback((value: string) => {
     // Remove all non-numeric characters
-    const digits = e.target.value.replace(/\D/g, '');
+    const digits = value.replace(/\D/g, '');
     
     // Limit to 10 digits
     const limitedDigits = digits.slice(0, 10);
@@ -76,19 +62,20 @@ export function ScanForm() {
       }
     }
     
-    setValue('patientPhone', formatted);
-  };
+    return formatted;
+  }, []);
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: ScanFormData) => {
     try {
       await addReferral({
         ...data,
         status: 'pending',
+        facilityId: data.facilityId as FacilityId,
       });
 
       toast.success('Referral created and saved locally.');
       router.push('/dashboard');
-    } catch (error) {
+    } catch {
       toast.error('Failed to create referral.');
     }
   };
@@ -102,120 +89,171 @@ export function ScanForm() {
           <CardTitle>Referral Details</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="patientName">Patient Name *</Label>
-                <Input
-                  id="patientName"
-                  {...register('patientName', { required: 'Patient name is required' })}
-                  placeholder="Full name"
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="patientName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Patient Name *</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Full name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-                {errors.patientName && (
-                  <p className="text-sm text-red-500">{errors.patientName.message}</p>
+
+                <FormField
+                  control={form.control}
+                  name="patientPhone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Phone Number</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="tel"
+                          placeholder="555-123-4567"
+                          value={field.value ?? ''}
+                          onChange={(event) => {
+                            const formatted = formatPhoneNumber(event.target.value);
+                            form.setValue('patientPhone', formatted, { shouldValidate: true });
+                            field.onChange(formatted);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <FormField
+                control={form.control}
+                name="diagnosis"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Diagnosis / Reason for Referral *</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Describe the diagnosis or reason for this referral"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
-              </div>
+              />
 
-              <div className="space-y-2">
-                <Label htmlFor="patientPhone">Phone Number</Label>
-                <Input
-                  id="patientPhone"
-                  type="tel"
-                  value={watch('patientPhone')}
-                  onChange={handlePhoneChange}
-                  placeholder="555-123-4567"
+              <div className="grid gap-4 md:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="facilityId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Facility *</FormLabel>
+                      <Select
+                        value={field.value}
+                        onValueChange={(value) => {
+                          field.onChange(value);
+                          form.setValue('referralType', '', { shouldValidate: true });
+                        }}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select facility" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {FACILITIES.map((f) => (
+                            <SelectItem key={f.id} value={f.id}>
+                              {f.name} ({f.distance})
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="referralType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Referral Type *</FormLabel>
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        disabled={!facility}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              placeholder={facility ? 'Select type' : 'Select facility first'}
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {facility?.types.map((type) => (
+                            <SelectItem key={type} value={type}>
+                              {type}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="diagnosis">Diagnosis / Reason for Referral *</Label>
-              <Textarea
-                id="diagnosis"
-                {...register('diagnosis', { required: 'Diagnosis is required' })}
-                placeholder="Describe the diagnosis or reason for this referral"
+              <FormField
+                control={form.control}
+                name="priority"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Priority *</FormLabel>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="low">Low - Routine</SelectItem>
+                        <SelectItem value="medium">Medium - Standard</SelectItem>
+                        <SelectItem value="high">High - Soon</SelectItem>
+                        <SelectItem value="critical">Critical - Urgent</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-              {errors.diagnosis && (
-                <p className="text-sm text-red-500">{errors.diagnosis.message}</p>
-              )}
-            </div>
 
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="facilityId">Facility *</Label>
-                <Select
-                  value={selectedFacility}
-                  onValueChange={(value) => {
-                    setSelectedFacility(value);
-                    setValue('facilityId', value as FacilityId);
-                    setValue('referralType', ''); // Reset referral type when facility changes
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select facility" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {FACILITIES.map((f) => (
-                      <SelectItem key={f.id} value={f.id}>
-                        {f.name} ({f.distance})
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="referralType">Referral Type *</Label>
-                <Select
-                  value={watch('referralType')}
-                  onValueChange={(value) => setValue('referralType', value)}
-                  disabled={!facility}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder={facility ? "Select type" : "Select facility first"} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {facility?.types.map((type) => (
-                      <SelectItem key={type} value={type}>
-                        {type}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="priority">Priority *</Label>
-              <Select
-                value={watch('priority')}
-                onValueChange={(value) => setValue('priority', value as Priority)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="low">Low - Routine</SelectItem>
-                  <SelectItem value="medium">Medium - Standard</SelectItem>
-                  <SelectItem value="high">High - Soon</SelectItem>
-                  <SelectItem value="critical">Critical - Urgent</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="notes">Additional Notes</Label>
-              <Textarea
-                id="notes"
-                {...register('notes')}
-                placeholder="Any additional information..."
+              <FormField
+                control={form.control}
+                name="notes"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Additional Notes</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder="Any additional information..." {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
 
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? 'Creating...' : 'Create Referral'}
-            </Button>
-          </form>
+              <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting ? 'Creating...' : 'Create Referral'}
+              </Button>
+            </form>
+          </Form>
         </CardContent>
       </Card>
     </div>
