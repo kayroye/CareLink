@@ -93,11 +93,11 @@ export default function SettingsPage() {
               onValueChange={setTheme}
               className="w-full"
             >
-              <TabsList className="w-full grid grid-cols-3 bg-muted p-1.5 h-14 gap-1">
+              <TabsList className="w-full grid grid-cols-3 items-stretch bg-muted !h-20 !p-1 gap-0.5">
                 <TabsTrigger
                   value="light"
                   className={cn(
-                    'flex flex-col items-center justify-center gap-1 rounded-lg transition-all duration-200 h-full',
+                    'flex h-full flex-col items-center justify-center gap-1 rounded-lg transition-all duration-200 py-0',
                     'data-[state=active]:bg-card data-[state=active]:shadow-md',
                     'data-[state=active]:text-amber-600 dark:data-[state=active]:text-amber-400',
                     'text-muted-foreground'
@@ -109,7 +109,7 @@ export default function SettingsPage() {
                 <TabsTrigger
                   value="dark"
                   className={cn(
-                    'flex flex-col items-center justify-center gap-1 rounded-lg transition-all duration-200 h-full',
+                    'flex h-full flex-col items-center justify-center gap-1 rounded-lg transition-all duration-200 py-0',
                     'data-[state=active]:bg-card data-[state=active]:shadow-md',
                     'data-[state=active]:text-indigo-600 dark:data-[state=active]:text-indigo-400',
                     'text-muted-foreground'
@@ -121,7 +121,7 @@ export default function SettingsPage() {
                 <TabsTrigger
                   value="system"
                   className={cn(
-                    'flex flex-col items-center justify-center gap-1 rounded-lg transition-all duration-200 h-full',
+                    'flex h-full flex-col items-center justify-center gap-1 rounded-lg transition-all duration-200 py-0',
                     'data-[state=active]:bg-card data-[state=active]:shadow-md',
                     'data-[state=active]:text-accent',
                     'text-muted-foreground'
@@ -133,27 +133,6 @@ export default function SettingsPage() {
               </TabsList>
             </Tabs>
           )}
-
-          {/* Theme Preview */}
-          <div className="mt-4 p-4 rounded-lg border-2 border-dashed border-border bg-background">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-8 h-8 rounded-full bg-linear-to-br from-teal-400 to-teal-600 flex items-center justify-center">
-                <span className="text-white text-xs font-bold">R</span>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-foreground">Preview</p>
-                <p className="text-xs text-muted-foreground">
-                  Currently using {resolvedTheme === 'dark' ? 'Northern Night' : 'Northern Professional'} theme
-                </p>
-              </div>
-            </div>
-            <div className="grid grid-cols-4 gap-2">
-              <div className="h-8 rounded bg-teal-500 dark:bg-teal-400" title="Accent" />
-              <div className="h-8 rounded bg-amber-500 dark:bg-amber-400" title="Warning" />
-              <div className="h-8 rounded bg-rose-500 dark:bg-rose-400" title="Critical" />
-              <div className="h-8 rounded bg-emerald-500 dark:bg-emerald-400" title="Success" />
-            </div>
-          </div>
         </CardContent>
       </Card>
 
