@@ -91,7 +91,9 @@ export function AppointmentCard({
 
         {/* Referral Type */}
         <div className="text-center">
-          <h3 className="text-xl font-semibold text-foreground">{referralType}</h3>
+          <h3 className="text-xl font-semibold text-foreground">
+            {referral?.diagnosis ?? referralType}
+          </h3>
         </div>
 
         {/* Facility Information */}
