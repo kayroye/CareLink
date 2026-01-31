@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medical Referral Form - Mental Health</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 12pt;
+      line-height: 1.4;
+      padding: 0.5in;
+      max-width: 8.5in;
+      margin: 0 auto;
+      background: white;
+    }
+    .header {
+      text-align: center;
+      border-bottom: 2px solid #333;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      font-size: 18pt;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .header p {
+      font-size: 10pt;
+      color: #555;
+    }
+    .form-section {
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      padding: 15px;
+    }
+    .section-title {
+      font-weight: bold;
+      font-size: 11pt;
+      text-transform: uppercase;
+      border-bottom: 1px solid #999;
+      padding-bottom: 5px;
+      margin-bottom: 15px;
+      color: #333;
+    }
+    .form-row {
+      display: flex;
+      margin-bottom: 12px;
+      gap: 20px;
+    }
+    .form-field {
+      flex: 1;
+    }
+    .form-field label {
+      display: block;
+      font-size: 9pt;
+      color: #666;
+      margin-bottom: 3px;
+      text-transform: uppercase;
+    }
+    .form-field .value {
+      font-size: 12pt;
+      border-bottom: 1px solid #333;
+      padding: 3px 0;
+      min-height: 20px;
+    }
+    .checkbox-row {
+      display: flex;
+      gap: 30px;
+      margin-top: 10px;
+    }
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .checkbox {
+      width: 14px;
+      height: 14px;
+      border: 1px solid #333;
+      display: inline-block;
+    }
+    .checkbox.checked {
+      background: #333;
+      position: relative;
+    }
+    .checkbox.checked::after {
+      content: '✓';
+      color: white;
+      position: absolute;
+      top: -2px;
+      left: 2px;
+      font-size: 12px;
+    }
+    .notes-box {
+      border: 1px solid #333;
+      min-height: 80px;
+      padding: 10px;
+      font-size: 11pt;
+      line-height: 1.5;
+    }
+    .signature-section {
+      display: flex;
+      gap: 40px;
+      margin-top: 30px;
+    }
+    .signature-field {
+      flex: 1;
+    }
+    .signature-line {
+      border-bottom: 1px solid #333;
+      height: 40px;
+      margin-bottom: 5px;
+    }
+    .footer {
+      margin-top: 30px;
+      font-size: 8pt;
+      color: #666;
+      text-align: center;
+      border-top: 1px solid #ccc;
+      padding-top: 10px;
+    }
+    .confidential-notice {
+      background: #f0f0f0;
+      border: 1px solid #999;
+      padding: 10px;
+      margin-bottom: 20px;
+      font-size: 9pt;
+      text-align: center;
+    }
+    @media print {
+      body { padding: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>CLEARWATER RIDGE NURSING STATION</h1>
+    <p>Community Health Referral Form</p>
+    <p>123 Northern Road, Clearwater Ridge, ON P0T 1A0 | Tel: (705) 555-0100 | Fax: (705) 555-0101</p>
+  </div>
+
+  <div class="confidential-notice">
+    <strong>CONFIDENTIAL MENTAL HEALTH REFERRAL</strong><br>
+    This document contains sensitive mental health information protected under PHIPA
+  </div>
+
+  <div class="form-section">
+    <div class="section-title">Patient Information</div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Patient Name</label>
+        <div class="value">Michael Ironside</div>
+      </div>
+      <div class="form-field">
+        <label>Date of Birth</label>
+        <div class="value">August 22, 1989</div>
+      </div>
+      <div class="form-field">
+        <label>Health Card #</label>
+        <div class="value">9876-543-210-CD</div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Phone Number</label>
+        <div class="value">(705) 555-0187</div>
+      </div>
+      <div class="form-field">
+        <label>Address</label>
+        <div class="value">78 Pine Street, Clearwater Ridge</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-title">Referral Details</div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Referring To</label>
+        <div class="value">Northern Mental Health Center - Counseling Services</div>
+      </div>
+      <div class="form-field">
+        <label>Date of Referral</label>
+        <div class="value">January 30, 2026</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 15px;">
+      <label style="font-size: 9pt; color: #666; text-transform: uppercase;">Priority Level</label>
+      <div class="checkbox-row">
+        <div class="checkbox-item">
+          <span class="checkbox"></span>
+          <span>Routine</span>
+        </div>
+        <div class="checkbox-item">
+          <span class="checkbox checked"></span>
+          <span><strong>Soon</strong></span>
+        </div>
+        <div class="checkbox-item">
+          <span class="checkbox"></span>
+          <span>Urgent</span>
+        </div>
+        <div class="checkbox-item">
+          <span class="checkbox"></span>
+          <span>Emergency</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-title">Clinical Information</div>
+    <div class="form-row">
+      <div class="form-field" style="flex: 2;">
+        <label>Diagnosis / Reason for Referral</label>
+        <div class="value">Major depressive disorder with anxiety features. Patient reports worsening symptoms following recent job loss at the mine. Requesting counseling and possible medication review.</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 15px;">
+      <label style="font-size: 9pt; color: #666; text-transform: uppercase; display: block; margin-bottom: 8px;">Additional Clinical Notes</label>
+      <div class="notes-box">
+        Patient is a 36-year-old male presenting with 6-week history of depressed mood, anhedonia, sleep disturbance (early morning awakening), decreased appetite with 8lb weight loss, and difficulty concentrating. PHQ-9 score: 18 (moderately severe). Denies suicidal ideation, plan, or intent. No history of self-harm. Lost employment 2 months ago when local mine reduced operations. Reports feeling isolated and "useless." Supportive family in community. Patient expresses preference for virtual appointments if possible due to concerns about stigma in small community.
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-title">Referring Provider</div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Provider Name</label>
+        <div class="value">Dr. James Coldwater, MD</div>
+      </div>
+      <div class="form-field">
+        <label>License #</label>
+        <div class="value">CPSO-98765</div>
+      </div>
+      <div class="form-field">
+        <label>Contact</label>
+        <div class="value">(705) 555-0100</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="signature-section">
+    <div class="signature-field">
+      <div class="signature-line" style="font-family: 'Brush Script MT', cursive; font-size: 18pt; padding-top: 10px;">J. Coldwater</div>
+      <label style="font-size: 9pt; color: #666;">Provider Signature</label>
+    </div>
+    <div class="signature-field">
+      <div class="signature-line" style="padding-top: 15px;">January 30, 2026</div>
+      <label style="font-size: 9pt; color: #666;">Date</label>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>CONFIDENTIAL MEDICAL DOCUMENT - For authorized healthcare personnel only</p>
+    <p>Form CR-REF-001 Rev. 2025-01</p>
+  </div>
+</body>
+</html>

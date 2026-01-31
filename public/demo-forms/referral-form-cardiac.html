@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medical Referral Form - Cardiac</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 12pt;
+      line-height: 1.4;
+      padding: 0.5in;
+      max-width: 8.5in;
+      margin: 0 auto;
+      background: white;
+    }
+    .header {
+      text-align: center;
+      border-bottom: 2px solid #333;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      font-size: 18pt;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .header p {
+      font-size: 10pt;
+      color: #555;
+    }
+    .urgent-banner {
+      background: #dc2626;
+      color: white;
+      text-align: center;
+      padding: 8px;
+      font-weight: bold;
+      font-size: 14pt;
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+    }
+    .form-section {
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      padding: 15px;
+    }
+    .section-title {
+      font-weight: bold;
+      font-size: 11pt;
+      text-transform: uppercase;
+      border-bottom: 1px solid #999;
+      padding-bottom: 5px;
+      margin-bottom: 15px;
+      color: #333;
+    }
+    .form-row {
+      display: flex;
+      margin-bottom: 12px;
+      gap: 20px;
+    }
+    .form-field {
+      flex: 1;
+    }
+    .form-field label {
+      display: block;
+      font-size: 9pt;
+      color: #666;
+      margin-bottom: 3px;
+      text-transform: uppercase;
+    }
+    .form-field .value {
+      font-size: 12pt;
+      border-bottom: 1px solid #333;
+      padding: 3px 0;
+      min-height: 20px;
+    }
+    .checkbox-row {
+      display: flex;
+      gap: 30px;
+      margin-top: 10px;
+    }
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .checkbox {
+      width: 14px;
+      height: 14px;
+      border: 1px solid #333;
+      display: inline-block;
+    }
+    .checkbox.checked {
+      background: #333;
+      position: relative;
+    }
+    .checkbox.checked::after {
+      content: '✓';
+      color: white;
+      position: absolute;
+      top: -2px;
+      left: 2px;
+      font-size: 12px;
+    }
+    .notes-box {
+      border: 1px solid #333;
+      min-height: 80px;
+      padding: 10px;
+      font-size: 11pt;
+      line-height: 1.5;
+    }
+    .signature-section {
+      display: flex;
+      gap: 40px;
+      margin-top: 30px;
+    }
+    .signature-field {
+      flex: 1;
+    }
+    .signature-line {
+      border-bottom: 1px solid #333;
+      height: 40px;
+      margin-bottom: 5px;
+    }
+    .footer {
+      margin-top: 30px;
+      font-size: 8pt;
+      color: #666;
+      text-align: center;
+      border-top: 1px solid #ccc;
+      padding-top: 10px;
+    }
+    @media print {
+      body { padding: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>CLEARWATER RIDGE NURSING STATION</h1>
+    <p>Community Health Referral Form</p>
+    <p>123 Northern Road, Clearwater Ridge, ON P0T 1A0 | Tel: (705) 555-0100 | Fax: (705) 555-0101</p>
+  </div>
+
+  <div class="urgent-banner">*** URGENT REFERRAL ***</div>
+
+  <div class="form-section">
+    <div class="section-title">Patient Information</div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Patient Name</label>
+        <div class="value">Harold Bearfoot</div>
+      </div>
+      <div class="form-field">
+        <label>Date of Birth</label>
+        <div class="value">March 15, 1952</div>
+      </div>
+      <div class="form-field">
+        <label>Health Card #</label>
+        <div class="value">1234-567-890-AB</div>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Phone Number</label>
+        <div class="value">(705) 555-0142</div>
+      </div>
+      <div class="form-field">
+        <label>Address</label>
+        <div class="value">45 Lakeshore Drive, Clearwater Ridge</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-title">Referral Details</div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Referring To</label>
+        <div class="value">Regional Hospital - Cardiology Department</div>
+      </div>
+      <div class="form-field">
+        <label>Date of Referral</label>
+        <div class="value">January 30, 2026</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 15px;">
+      <label style="font-size: 9pt; color: #666; text-transform: uppercase;">Priority Level</label>
+      <div class="checkbox-row">
+        <div class="checkbox-item">
+          <span class="checkbox"></span>
+          <span>Routine</span>
+        </div>
+        <div class="checkbox-item">
+          <span class="checkbox"></span>
+          <span>Soon</span>
+        </div>
+        <div class="checkbox-item">
+          <span class="checkbox"></span>
+          <span>Urgent</span>
+        </div>
+        <div class="checkbox-item">
+          <span class="checkbox checked"></span>
+          <span><strong>EMERGENCY</strong></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-title">Clinical Information</div>
+    <div class="form-row">
+      <div class="form-field" style="flex: 2;">
+        <label>Diagnosis / Reason for Referral</label>
+        <div class="value">Acute chest pain with elevated troponins. ECG shows ST elevation in leads V1-V4. Suspected STEMI. Requires urgent cardiac catheterization.</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 15px;">
+      <label style="font-size: 9pt; color: #666; text-transform: uppercase; display: block; margin-bottom: 8px;">Additional Clinical Notes</label>
+      <div class="notes-box">
+        Patient presented at 0630 with crushing substernal chest pain radiating to left arm. Pain began approximately 2 hours prior. History of Type 2 DM and hypertension. Current medications: Metformin 1000mg BID, Lisinopril 20mg daily. Aspirin 325mg and Nitroglycerin SL administered. Hemodynamically stable but pain persists. Air ambulance contacted for emergency transfer.
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-title">Referring Provider</div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Provider Name</label>
+        <div class="value">Dr. Sarah Mitchell, NP</div>
+      </div>
+      <div class="form-field">
+        <label>License #</label>
+        <div class="value">NP-12345</div>
+      </div>
+      <div class="form-field">
+        <label>Contact</label>
+        <div class="value">(705) 555-0100</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="signature-section">
+    <div class="signature-field">
+      <div class="signature-line" style="font-family: 'Brush Script MT', cursive; font-size: 18pt; padding-top: 10px;">S. Mitchell</div>
+      <label style="font-size: 9pt; color: #666;">Provider Signature</label>
+    </div>
+    <div class="signature-field">
+      <div class="signature-line" style="padding-top: 15px;">January 30, 2026</div>
+      <label style="font-size: 9pt; color: #666;">Date</label>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>CONFIDENTIAL MEDICAL DOCUMENT - For authorized healthcare personnel only</p>
+    <p>Form CR-REF-001 Rev. 2025-01</p>
+  </div>
+</body>
+</html>
