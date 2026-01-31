@@ -115,37 +115,40 @@ export function AppointmentCard({
         </div>
 
         {/* Confirmation Status or Actions */}
-        {confirmed ? (
-          <div className="flex items-center justify-center gap-3 p-4 bg-completed-muted rounded-lg border border-completed-muted">
-            <CheckCircle className="h-7 w-7 text-completed-foreground" />
-            <span className="text-lg font-medium text-completed-foreground">Attendance Confirmed</span>
-          </div>
-        ) : (
-          <div className="space-y-4">
+        <div className="space-y-4">
+          {confirmed ? (
+            <div className="flex items-center justify-center gap-3 p-4 bg-completed-muted rounded-lg border border-completed-muted">
+              <CheckCircle className="h-7 w-7 text-completed-foreground" />
+              <span className="text-lg font-medium text-completed-foreground">
+                Attendance Confirmed
+              </span>
+            </div>
+          ) : (
             <Button
               onClick={handleConfirm}
               disabled={isConfirming}
               className={cn(
-                'w-full h-14 text-lg font-semibold',
+                'w-full h-12 text-base font-semibold',
                 'bg-accent hover:bg-accent/90 text-accent-foreground',
                 'disabled:opacity-50 disabled:cursor-not-allowed'
               )}
             >
               {isConfirming ? 'Confirming...' : 'Confirm Attendance'}
             </Button>
+          )}
 
-            {referral && (
-              <AddToCalendarButton className="w-full h-12 text-base" referral={referral} />
-            )}
+          {referral && <AddToCalendarButton className="w-full h-12 text-base" referral={referral} />}
 
-            <button
+          {!confirmed && (
+            <Button
+              variant="outline"
               onClick={handleReschedule}
-              className="w-full text-center text-lg text-accent hover:text-accent/80 hover:underline font-medium py-2"
+              className="w-full h-12 text-base border-destructive text-destructive hover:bg-destructive/10 hover:border-destructive"
             >
               Request Reschedule
-            </button>
-          </div>
-        )}
+            </Button>
+          )}
+        </div>
       </CardContent>
     </Card>
   );
