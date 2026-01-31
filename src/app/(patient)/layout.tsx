@@ -2,19 +2,10 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { CalendarDays, ClipboardList, LogOut, Loader2, PhoneCall, Settings } from 'lucide-react';
+import { LogOut, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Sidebar } from '@/components/layout/Sidebar';
-import { useSidebar } from '@/components/layout/AppShell';
 import { useAuth } from '@/contexts/AuthContext';
-
-const patientSidebarItems = [
-  { href: '/my-referrals', label: 'Referrals', icon: ClipboardList },
-  { href: '/appointments', label: 'Appointments', icon: CalendarDays },
-  { href: '/request-callback', label: 'Callback', icon: PhoneCall },
-  { href: '/settings', label: 'Settings', icon: Settings },
-];
 
 export default function PatientLayout({
   children,
@@ -23,7 +14,6 @@ export default function PatientLayout({
 }) {
   const router = useRouter();
   const { user, isAuthenticated, isPatient, loading, logout } = useAuth();
-  const { isCollapsed, toggleCollapse } = useSidebar();
 
   useEffect(() => {
     // Wait for auth to load
@@ -67,19 +57,6 @@ export default function PatientLayout({
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
-      <div className="hidden md:block">
-        <Sidebar
-          isCollapsed={isCollapsed}
-          onToggleCollapse={toggleCollapse}
-          navItems={patientSidebarItems}
-        />
-      </div>
-
-      <div
-        className={`min-h-screen transition-all duration-300 ease-in-out ${
-          isCollapsed ? 'md:ml-16' : 'md:ml-60'
-        }`}
-      >
         {/* Simplified Patient Header */}
         <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm">
           <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -108,11 +85,10 @@ export default function PatientLayout({
           </div>
         </header>
 
-        {/* Main Content with increased padding and larger text */}
-        <main className="max-w-4xl mx-auto p-6 text-lg">
-          {children}
-        </main>
-      </div>
+      {/* Main Content with increased padding and larger text */}
+      <main className="max-w-4xl mx-auto p-6 text-lg">
+        {children}
+      </main>
 
       {/* Simple Patient Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 shadow-lg md:hidden">

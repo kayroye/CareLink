@@ -101,7 +101,7 @@ export default function LoginPage() {
         </div>
 
         {/* Tagline */}
-        <p className="text-muted-foreground text-lg mb-10 text-center max-w-md">
+        <p className="text-foreground/70 text-lg mb-10 text-center max-w-md">
           Seamless healthcare referral coordination for patients and providers
         </p>
 
@@ -114,13 +114,13 @@ export default function LoginPage() {
               {/* Patient Card */}
               <button
                 onClick={() => setSelectedRole('patient')}
-                className="group p-6 bg-card rounded-xl border-2 border-border hover:border-accent hover:shadow-lg transition-all duration-200 text-left"
+                className="group p-6 bg-card rounded-xl border-2 border-border/80 hover:border-accent hover:shadow-lg transition-all duration-200 text-left"
               >
                 <div className="w-14 h-14 rounded-lg bg-scheduled-muted flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors">
                   <User className="h-7 w-7 text-accent" />
                 </div>
                 <h3 className="heading-5 text-foreground mb-2">I&apos;m a Patient</h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-foreground/70">
                   Access your referrals and appointments with a secure magic link
                 </p>
               </button>
@@ -128,13 +128,13 @@ export default function LoginPage() {
               {/* Healthcare Provider Card */}
               <button
                 onClick={() => setSelectedRole('nurse')}
-                className="group p-6 bg-card rounded-xl border-2 border-border hover:border-accent hover:shadow-lg transition-all duration-200 text-left"
+                className="group p-6 bg-card rounded-xl border-2 border-border/80 hover:border-accent hover:shadow-lg transition-all duration-200 text-left"
               >
-                <div className="w-14 h-14 rounded-lg bg-muted flex items-center justify-center mb-4 group-hover:bg-muted/80 transition-colors">
-                  <Stethoscope className="h-7 w-7 text-muted-foreground" />
+                <div className="w-14 h-14 rounded-lg bg-secondary flex items-center justify-center mb-4 group-hover:bg-secondary/80 transition-colors">
+                  <Stethoscope className="h-7 w-7 text-foreground/70" />
                 </div>
                 <h3 className="heading-5 text-foreground mb-2">I&apos;m a Healthcare Provider</h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-foreground/70">
                   Manage patient referrals and coordinate care
                 </p>
               </button>
@@ -147,7 +147,7 @@ export default function LoginPage() {
           <div className="w-full max-w-md">
             <button
               onClick={() => setSelectedRole(null)}
-              className="text-sm text-muted-foreground hover:text-foreground mb-6 flex items-center gap-1"
+              className="text-sm text-foreground/70 hover:text-foreground mb-6 flex items-center gap-1"
             >
               <span>&larr;</span> Back to role selection
             </button>
@@ -160,7 +160,7 @@ export default function LoginPage() {
                 <h2 className="heading-4 text-foreground">Patient Sign In</h2>
               </div>
 
-              <p className="text-muted-foreground mb-6">
+              <p className="text-foreground/70 mb-6">
                 Enter your email address and we&apos;ll send you a secure link to access your portal.
               </p>
 
@@ -259,7 +259,7 @@ export default function LoginPage() {
           <div className="w-full max-w-md">
             <button
               onClick={() => setSelectedRole(null)}
-              className="text-sm text-muted-foreground hover:text-foreground mb-6 flex items-center gap-1"
+              className="text-sm text-foreground/70 hover:text-foreground mb-6 flex items-center gap-1"
             >
               <span>&larr;</span> Back to role selection
             </button>
@@ -335,7 +335,7 @@ export default function LoginPage() {
               </form>
 
               <div className="mt-6 pt-4 border-t border-border">
-                <p className="text-xs text-muted-foreground text-center">
+                <p className="text-xs text-foreground/60 text-center">
                   Demo: Use any email ending in @referralloop.com, @hospital.com, or @clinic.com with any password
                 </p>
               </div>

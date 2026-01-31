@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 @theme {
   --font-sans: var(--font-source-sans), ui-sans-serif, system-ui, sans-serif;
@@ -35,23 +38,23 @@
 :root {
   /* Northern Professional Color Palette - Light Mode */
   --background: 210 40% 98%; /* Cool white #f8fafc */
-  --foreground: 215 19% 35%; /* Slate blue #475569 */
+  --foreground: 215 25% 25%; /* Deeper slate #334155 */
   --card: 0 0% 100%; /* Pure white #ffffff */
-  --card-foreground: 215 19% 35%;
+  --card-foreground: 215 25% 25%;
   --popover: 0 0% 100%;
-  --popover-foreground: 215 19% 35%;
+  --popover-foreground: 215 25% 25%;
   --primary: 215 16% 47%; /* Slate blue #64748b */
   --primary-foreground: 0 0% 100%;
   --secondary: 210 40% 96%;
   --secondary-foreground: 215 19% 35%;
-  --muted: 215 16% 47%; /* Slate #94a3b8 - adjusted for HSL */
-  --muted-foreground: 215 14% 63%;
+  --muted: 210 40% 96%; /* Soft surface */
+  --muted-foreground: 215 20% 45%; /* Stronger muted text */
   --accent: 168 84% 32%; /* Deep teal #0d9488 */
   --accent-foreground: 0 0% 100%;
   --destructive: 350 89% 52%; /* Rose #e11d48 */
   --destructive-foreground: 0 0% 100%;
-  --border: 214 32% 91%;
-  --input: 214 32% 91%;
+  --border: 214 25% 88%;
+  --input: 214 25% 88%;
   --ring: 168 84% 32%; /* Deep teal for focus rings */
   --radius: 0.5rem; /* 8px standard */
 
@@ -89,37 +92,47 @@
 
   /* Sidebar colors - Light mode */
   --sidebar-bg: 222 47% 11%; /* Deep slate #0f172a */
-  --sidebar-border: 217 33% 17%; /* Slate border #1e293b */
-  --sidebar-foreground: 215 14% 63%; /* Muted text */
+  --sidebar-border: 217 33% 20%; /* Slightly brighter border */
+  --sidebar-foreground: 210 30% 82%; /* Higher contrast text */
   --sidebar-foreground-active: 0 0% 100%; /* White for active */
   --sidebar-accent: 168 84% 40%; /* Teal accent */
 
   /* Typography */
   --font-size-base: 16px;
   --line-height-base: 1.6;
+  
+  /* Shadcn Sidebar variables - Light mode */
+  --sidebar-background: 0 0% 98%;
+  --sidebar-foreground: 240 5.3% 26.1%;
+  --sidebar-primary: 240 5.9% 10%;
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 240 4.8% 95.9%;
+  --sidebar-accent-foreground: 240 5.9% 10%;
+  --sidebar-border: 220 13% 91%;
+  --sidebar-ring: 217.2 91.2% 59.8%;
 }
 
 /* Northern Night - Dark Mode */
 .dark {
   /* Deep slate backgrounds with subtle blue undertones */
   --background: 222 47% 8%; /* Very deep slate #0a0f1a */
-  --foreground: 210 40% 92%; /* Light cool gray #e8eef5 */
+  --foreground: 210 40% 96%; /* Brighter for contrast */
   --card: 222 47% 11%; /* Deep slate card #0f172a */
-  --card-foreground: 210 40% 92%;
+  --card-foreground: 210 40% 96%;
   --popover: 222 47% 11%;
-  --popover-foreground: 210 40% 92%;
+  --popover-foreground: 210 40% 96%;
   --primary: 210 40% 80%; /* Light slate for primary */
   --primary-foreground: 222 47% 11%;
   --secondary: 217 33% 17%; /* Elevated surface #1e293b */
-  --secondary-foreground: 210 40% 92%;
+  --secondary-foreground: 210 40% 96%;
   --muted: 217 33% 17%;
-  --muted-foreground: 215 20% 55%; /* Dimmed text */
+  --muted-foreground: 215 20% 65%; /* Higher contrast muted */
   --accent: 168 76% 42%; /* Brighter teal for dark bg #14b8a6 */
   --accent-foreground: 222 47% 11%;
   --destructive: 350 80% 58%; /* Brighter rose for dark #f43f5e */
   --destructive-foreground: 0 0% 100%;
-  --border: 217 33% 20%; /* Subtle border */
-  --input: 217 33% 20%;
+  --border: 217 33% 24%; /* More visible border */
+  --input: 217 33% 24%;
   --ring: 168 76% 42%; /* Teal focus rings */
 
   /* Healthcare colors - adjusted for dark mode visibility */
@@ -156,10 +169,20 @@
 
   /* Sidebar colors - Dark mode (slightly elevated from main bg) */
   --sidebar-bg: 222 47% 6%; /* Even deeper #070a12 */
-  --sidebar-border: 217 33% 14%; /* Subtle border */
-  --sidebar-foreground: 215 20% 55%;
+  --sidebar-border: 217 33% 18%; /* Clearer separation */
+  --sidebar-foreground: 210 35% 80%;
   --sidebar-foreground-active: 0 0% 100%;
   --sidebar-accent: 168 76% 42%;
+  
+  /* Shadcn Sidebar variables - Dark mode */
+  --sidebar-background: 240 5.9% 10%;
+  --sidebar-foreground: 240 4.8% 95.9%;
+  --sidebar-primary: 224.3 76.3% 48%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 240 3.7% 15.9%;
+  --sidebar-accent-foreground: 240 4.8% 95.9%;
+  --sidebar-border: 240 3.7% 15.9%;
+  --sidebar-ring: 217.2 91.2% 59.8%;
 }
 
 /* Text size modifiers */
@@ -503,4 +526,20 @@ html.dark {
 .dark .badge-low {
   background: hsl(215 25% 20%);
   color: hsl(215 20% 65%);
+}
+
+@theme inline {
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
 }

@@ -1,13 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, ReactNode } from 'react';
 import { useNetwork } from '@/contexts/NetworkContext';
 import { useReferrals } from '@/lib/db/hooks';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Wifi, WifiOff, RefreshCw, CloudOff } from 'lucide-react';
 
-export function Header() {
+interface HeaderProps {
+  children?: ReactNode;
+}
+
+export function Header({ children }: HeaderProps) {
   const { isOnline, toggleNetwork } = useNetwork();
   const { syncAll, referrals } = useReferrals();
   const [isSyncing, setIsSyncing] = useState(false);
@@ -29,6 +33,7 @@ export function Header() {
     }`}>
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         <div className="flex items-center gap-3">
+          {children}
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-linear-to-br from-sky-400 to-sky-600 flex items-center justify-center shadow-sm">
               <span className="text-white text-sm font-bold">R</span>
