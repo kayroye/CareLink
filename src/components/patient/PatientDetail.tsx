@@ -5,7 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ArrowLeft, MapPin, Calendar, Clock, CheckCircle } from 'lucide-react';
+import { ArrowLeft, MapPin, Calendar, Clock, CheckCircle, CalendarPlus, MessageSquare } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { generateICS, downloadICS } from '@/lib/ics';
+import { useState } from 'react';
 import { useReferrals } from '@/lib/db/hooks';
 import { FACILITIES, Status } from '@/lib/db/schema';
 import { QRWallet } from './QRWallet';
@@ -31,8 +35,9 @@ const statusColors: Record<string, string> = {
 
 export function PatientDetail({ referralId }: PatientDetailProps) {
   const router = useRouter();
-  const { referrals, updateStatus } = useReferrals();
+  const { referrals, updateStatus, updateReferral } = useReferrals();
   const referral = referrals.find((r) => r.id === referralId);
+  const [isSendingSMS, setIsSendingSMS] = useState(false);
 
   if (!referral) {
     return (
@@ -55,6 +60,14 @@ export function PatientDetail({ referralId }: PatientDetailProps) {
   const handleStatusChange = async (newStatus: Status) => {
     await updateStatus(referral.id, newStatus);
     toast.success(`Referral marked as ${newStatus}`);
+  };
+
+  const handleDownloadICS = async () => {
+    const ics = await generateICS(referral);
+    if (ics) {
+      downloadICS(ics, `appointment-${referral.patientName.replace(/\s+/g, '-')}.ics`);
+      toast.success('Calendar file downloaded');
+    }
   };
 
   return (
@@ -158,8 +171,36 @@ export function PatientDetail({ referralId }: PatientDetailProps) {
           </div>
 
           <div className="border-t pt-4">
-            <h4 className="mb-3 text-sm font-medium">Patient Wallet</h4>
-            <QRWallet referral={referral} />
+            <h4 className="mb-3 text-sm font-medium">Actions</h4>
+            <div className="flex flex-wrap gap-2">
+              <QRWallet referral={referral} />
+
+              {referral.status === 'scheduled' && !referral.appointmentDate && (
+                <div className="w-full mt-4">
+                  <Label htmlFor="appointmentDate">Set Appointment Date & Time</Label>
+                  <Input
+                    id="appointmentDate"
+                    type="datetime-local"
+                    className="mt-1"
+                    onChange={async (e) => {
+                      if (e.target.value) {
+                        await updateReferral(referral.id, {
+                          appointmentDate: new Date(e.target.value).toISOString()
+                        });
+                        toast.success('Appointment scheduled');
+                      }
+                    }}
+                  />
+                </div>
+              )}
+
+              {referral.appointmentDate && (
+                <Button variant="outline" onClick={handleDownloadICS}>
+                  <CalendarPlus className="mr-2 h-4 w-4" />
+                  Add to Calendar
+                </Button>
+              )}
+            </div>
           </div>
         </CardContent>
       </Card>
