@@ -22,7 +22,7 @@ export default function SettingsPage() {
   const [smsReminders, setSmsReminders] = useState(true);
   const [isSaved, setIsSaved] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
 
   // Avoid hydration mismatch for theme
   useEffect(() => {
@@ -93,7 +93,7 @@ export default function SettingsPage() {
               onValueChange={setTheme}
               className="w-full"
             >
-              <TabsList className="w-full grid grid-cols-3 items-stretch bg-muted !h-20 !p-1 gap-0.5">
+              <TabsList className="w-full grid grid-cols-3 items-stretch bg-muted h-20! p-1! gap-0.5">
                 <TabsTrigger
                   value="light"
                   className={cn(

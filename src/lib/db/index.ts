@@ -21,14 +21,14 @@ interface DatabaseCollections {
   magicLinkTokens: MagicLinkTokenCollection;
 }
 
-type ReferralLoopDatabase = RxDatabase<DatabaseCollections>;
+type CareLinkDatabase = RxDatabase<DatabaseCollections>;
 
-let dbPromise: Promise<ReferralLoopDatabase> | null = null;
+let dbPromise: Promise<CareLinkDatabase> | null = null;
 let devModePluginPromise: Promise<void> | null = null;
 
-const DB_NAME = 'referralloop';
+const DB_NAME = 'CareLink';
 
-async function initDatabase(): Promise<ReferralLoopDatabase> {
+async function initDatabase(): Promise<CareLinkDatabase> {
   const isDev = process.env.NODE_ENV !== 'production';
 
   if (isDev) {
@@ -65,7 +65,7 @@ async function initDatabase(): Promise<ReferralLoopDatabase> {
   return db;
 }
 
-export async function getDatabase(): Promise<ReferralLoopDatabase> {
+export async function getDatabase(): Promise<CareLinkDatabase> {
   if (dbPromise) return dbPromise;
 
   dbPromise = initDatabase().catch(async (error) => {
@@ -105,4 +105,4 @@ export async function getDatabase(): Promise<ReferralLoopDatabase> {
   return dbPromise;
 }
 
-export type { ReferralLoopDatabase, ReferralCollection, UserCollection, MagicLinkTokenCollection };
+export type { CareLinkDatabase, ReferralCollection, UserCollection, MagicLinkTokenCollection };

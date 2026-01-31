@@ -22,7 +22,7 @@ const sourceSans3 = Source_Sans_3({
 });
 
 export const metadata: Metadata = {
-  title: 'ReferralLoop - Offline-First Patient Referral Tracking',
+  title: 'CareLink - Offline-First Patient Referral Tracking',
   description: 'Track and manage patient referrals even when offline',
 };
 

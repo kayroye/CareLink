@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
  * In production, you would validate against a real database.
  *
  * For demo:
- * - Any email ending in @referralloop.com, @hospital.com, or @clinic.com
+ * - Any email ending in @CareLink.com, @hospital.com, or @clinic.com
  * - Any non-empty password
  * - Creates a user object on the fly
  */
@@ -17,7 +17,7 @@ function generateId(): string {
 
 // Valid nurse email domains for demo
 const NURSE_EMAIL_DOMAINS = [
-  '@referralloop.com',
+  '@CareLink.com',
   '@hospital.com',
   '@clinic.com',
   '@health.gov',
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     if (!isNurseEmail(normalizedEmail)) {
       return NextResponse.json({
         error: 'Invalid credentials. Healthcare providers must use an organizational email.',
-        hint: 'Demo: Use an email ending in @referralloop.com, @hospital.com, or @clinic.com'
+        hint: 'Demo: Use an email ending in @CareLink.com, @hospital.com, or @clinic.com'
       }, { status: 401 });
     }
 

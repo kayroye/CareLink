@@ -1,5 +1,5 @@
 /**
- * Design Tokens for ReferralLoop
+ * Design Tokens for CareLink
  * "Northern Professional" Design System
  *
  * Cool, trustworthy healthcare interface with bold accents

@@ -17,7 +17,7 @@ export function Header({ children }: HeaderProps) {
     }`}>
       <div className="flex items-center justify-between max-w-7xl mx-auto">
         <div className="flex items-center gap-3">
-          {children ?? <span className="text-sm font-semibold text-foreground">ReferralLoop</span>}
+          {children ?? <span className="text-sm font-semibold text-foreground">CareLink</span>}
           {!isOnline && (
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-pending-muted border border-pending-muted">
               <CloudOff className="h-3.5 w-3.5 text-pending-foreground" />

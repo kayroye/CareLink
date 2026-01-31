@@ -84,22 +84,22 @@ export function ScanForm() {
     <div className="space-y-6">
       <ImageUpload onOcrComplete={handleOcrComplete} onError={handleOcrError} />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Referral Details</CardTitle>
+      <Card className="card-elevated bg-card border-border">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-foreground font-semibold text-[18px] tracking-tight">Referral Details</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <div className="grid gap-4 md:grid-cols-2">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+              <div className="grid gap-5 md:grid-cols-2">
                 <FormField
                   control={form.control}
                   name="patientName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Patient Name *</FormLabel>
+                      <FormLabel className="text-sm font-medium text-foreground">Patient Name *</FormLabel>
                       <FormControl>
-                        <Input placeholder="Full name" {...field} />
+                        <Input placeholder="Full name" {...field} className="bg-background" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -111,7 +111,7 @@ export function ScanForm() {
                   name="patientPhone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Phone Number</FormLabel>
+                      <FormLabel className="text-sm font-medium text-foreground">Phone Number</FormLabel>
                       <FormControl>
                         <Input
                           type="tel"
@@ -122,6 +122,7 @@ export function ScanForm() {
                             form.setValue('patientPhone', formatted, { shouldValidate: true });
                             field.onChange(formatted);
                           }}
+                          className="bg-background"
                         />
                       </FormControl>
                       <FormMessage />
@@ -135,11 +136,12 @@ export function ScanForm() {
                 name="diagnosis"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Diagnosis / Reason for Referral *</FormLabel>
+                    <FormLabel className="text-sm font-medium text-foreground">Diagnosis / Reason for Referral *</FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder="Describe the diagnosis or reason for this referral"
                         {...field}
+                        className="bg-background resize-none min-h-[100px]"
                       />
                     </FormControl>
                     <FormMessage />
@@ -147,13 +149,13 @@ export function ScanForm() {
                 )}
               />
 
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className="grid gap-5 md:grid-cols-2">
                 <FormField
                   control={form.control}
                   name="facilityId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Facility *</FormLabel>
+                      <FormLabel className="text-sm font-medium text-foreground">Facility *</FormLabel>
                       <Select
                         value={field.value}
                         onValueChange={(value) => {
@@ -162,7 +164,7 @@ export function ScanForm() {
                         }}
                       >
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="bg-background">
                             <SelectValue placeholder="Select facility" />
                           </SelectTrigger>
                         </FormControl>
@@ -184,14 +186,14 @@ export function ScanForm() {
                   name="referralType"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Referral Type *</FormLabel>
+                      <FormLabel className="text-sm font-medium text-foreground">Referral Type *</FormLabel>
                       <Select
                         value={field.value}
                         onValueChange={field.onChange}
                         disabled={!facility}
                       >
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="bg-background">
                             <SelectValue
                               placeholder={facility ? 'Select type' : 'Select facility first'}
                             />
@@ -216,10 +218,10 @@ export function ScanForm() {
                 name="priority"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Priority *</FormLabel>
+                    <FormLabel className="text-sm font-medium text-foreground">Priority *</FormLabel>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <FormControl>
-                        <SelectTrigger>
+                        <SelectTrigger className="bg-background">
                           <SelectValue />
                         </SelectTrigger>
                       </FormControl>
@@ -240,18 +242,29 @@ export function ScanForm() {
                 name="notes"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Additional Notes</FormLabel>
+                    <FormLabel className="text-sm font-medium text-foreground">Additional Notes</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Any additional information..." {...field} />
+                      <Textarea 
+                        placeholder="Any additional information..." 
+                        {...field} 
+                        className="bg-background resize-none min-h-[100px]"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? 'Creating...' : 'Create Referral'}
-              </Button>
+              <div className="pt-2">
+                <Button 
+                  type="submit" 
+                  className="w-full font-semibold" 
+                  disabled={form.formState.isSubmitting}
+                  size="lg"
+                >
+                  {form.formState.isSubmitting ? 'Creating...' : 'Create Referral'}
+                </Button>
+              </div>
             </form>
           </Form>
         </CardContent>

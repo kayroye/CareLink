@@ -1,4 +1,4 @@
-# ReferralLoop Implementation Plan
+# CareLink Implementation Plan
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
@@ -187,15 +187,15 @@ interface DatabaseCollections {
   referrals: ReferralCollection;
 }
 
-type ReferralLoopDatabase = RxDatabase<DatabaseCollections>;
+type CareLinkDatabase = RxDatabase<DatabaseCollections>;
 
-let dbPromise: Promise<ReferralLoopDatabase> | null = null;
+let dbPromise: Promise<CareLinkDatabase> | null = null;
 
-export async function getDatabase(): Promise<ReferralLoopDatabase> {
+export async function getDatabase(): Promise<CareLinkDatabase> {
   if (dbPromise) return dbPromise;
 
   dbPromise = createRxDatabase<DatabaseCollections>({
-    name: 'referralloop',
+    name: 'CareLink',
     storage: getRxStorageDexie(),
   }).then(async (db) => {
     await db.addCollections({
@@ -209,7 +209,7 @@ export async function getDatabase(): Promise<ReferralLoopDatabase> {
   return dbPromise;
 }
 
-export type { ReferralLoopDatabase, ReferralCollection };
+export type { CareLinkDatabase, ReferralCollection };
 ```
 
 **Step 4: Create React hooks for database access**
@@ -447,7 +447,7 @@ export function Header() {
     <header className={`sticky top-0 z-50 border-b bg-white px-4 py-3 ${!isOnline ? 'bg-gray-50' : ''}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <h1 className="text-xl font-bold text-primary">ReferralLoop</h1>
+          <h1 className="text-xl font-bold text-primary">CareLink</h1>
           {!isOnline && (
             <Badge variant="secondary" className="bg-amber-100 text-amber-800">
               Offline Mode
@@ -550,7 +550,7 @@ import { Toaster } from '@/components/ui/toaster';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'ReferralLoop - Offline-First Patient Referral Tracking',
+  title: 'CareLink - Offline-First Patient Referral Tracking',
   description: 'Track and manage patient referrals even when offline',
 };
 
@@ -2525,7 +2525,7 @@ Use Playwright MCP to:
 
 ```bash
 git add -A
-git commit -m "feat: complete ReferralLoop MVP for hackathon demo"
+git commit -m "feat: complete CareLink MVP for hackathon demo"
 ```
 
 ---

@@ -13,7 +13,7 @@ const TEXT_SIZE_CONFIG: Record<TextSize, { label: string; size: number }> = {
 };
 
 const TEXT_SIZE_ORDER: TextSize[] = ['default', 'large', 'xl'];
-const STORAGE_KEY = 'referralloop-text-size';
+const STORAGE_KEY = 'CareLink-text-size';
 
 function getNextSize(current: TextSize): TextSize {
   const currentIndex = TEXT_SIZE_ORDER.indexOf(current);

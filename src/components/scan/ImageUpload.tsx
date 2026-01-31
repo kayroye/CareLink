@@ -65,11 +65,11 @@ export function ImageUpload({ onOcrComplete, onError }: ImageUploadProps) {
   };
 
   return (
-    <Card>
-      <CardContent className="p-4">
+    <Card className="card-elevated bg-card border-border">
+      <CardContent className="p-6">
         {!isOnline && (
-          <div className="mb-4 rounded-lg bg-muted p-3 text-foreground">
-            <p className="text-sm font-medium">OCR unavailable offline</p>
+          <div className="mb-4 rounded-lg bg-pending-muted border border-pending/20 p-4">
+            <p className="text-sm font-semibold text-foreground mb-1">OCR unavailable offline</p>
             <p className="text-sm text-muted-foreground">
               Please enter referral details manually below.
             </p>
@@ -77,12 +77,13 @@ export function ImageUpload({ onOcrComplete, onError }: ImageUploadProps) {
         )}
 
         {!image ? (
-          <div className="flex flex-col items-center gap-4">
-            <div className="flex gap-4">
+          <div className="flex flex-col items-center gap-4 py-2">
+            <div className="flex gap-3">
               <Button
                 variant="outline"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={!isOnline}
+                className="font-medium"
               >
                 <Upload className="mr-2 h-4 w-4" />
                 Upload Image
@@ -97,6 +98,7 @@ export function ImageUpload({ onOcrComplete, onError }: ImageUploadProps) {
                   }
                 }}
                 disabled={!isOnline}
+                className="font-medium"
               >
                 <Camera className="mr-2 h-4 w-4" />
                 Take Photo
@@ -109,7 +111,7 @@ export function ImageUpload({ onOcrComplete, onError }: ImageUploadProps) {
               onChange={handleFileSelect}
               className="hidden"
             />
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground/90 text-center leading-relaxed">
               {isOnline
                 ? 'Upload or photograph a referral form to auto-fill details'
                 : 'Connect to network to enable OCR scanning'}
@@ -117,27 +119,27 @@ export function ImageUpload({ onOcrComplete, onError }: ImageUploadProps) {
           </div>
         ) : (
           <div className="space-y-4">
-            <div className="relative">
+            <div className="relative rounded-lg overflow-hidden bg-surface-sunken">
               <Image
                 src={image}
                 alt="Uploaded referral form"
-                className="max-h-64 w-full rounded-lg object-contain"
+                className="max-h-64 w-full object-contain"
                 width={100}
                 height={100}
               />
               <Button
                 variant="destructive"
                 size="icon"
-                className="absolute right-2 top-2"
+                className="absolute right-2 top-2 shadow-lg"
                 onClick={clearImage}
               >
                 <X className="h-4 w-4" />
               </Button>
             </div>
             {isProcessing && (
-              <div className="flex items-center justify-center gap-2 text-muted-foreground">
+              <div className="flex items-center justify-center gap-2 text-muted-foreground py-2">
                 <Loader2 className="h-4 w-4 animate-spin" />
-                <span>Processing image with AI...</span>
+                <span className="text-sm font-medium">Processing image with AI...</span>
               </div>
             )}
           </div>

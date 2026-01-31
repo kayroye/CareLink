@@ -12,30 +12,30 @@ export default function NurseSettingsPage() {
         <p className="text-muted-foreground">Manage your nurse portal preferences.</p>
       </div>
 
-      <Card className="max-w-2xl">
-        <CardHeader>
-          <CardTitle>Notifications</CardTitle>
-          <CardDescription>Choose how you want to be alerted.</CardDescription>
+      <Card className="max-w-2xl card-elevated bg-card border-border">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-foreground font-semibold text-[18px] tracking-tight">Notifications</CardTitle>
+          <CardDescription className="text-muted-foreground/90">Choose how you want to be alerted.</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <Label htmlFor="sms-alerts" className="text-sm font-medium">
+        <CardContent className="space-y-6">
+          <div className="flex items-center justify-between gap-4 pb-2">
+            <div className="flex-1">
+              <Label htmlFor="sms-alerts" className="text-sm font-medium text-foreground">
                 SMS alerts
               </Label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground/90 mt-1 leading-relaxed">
                 Get text updates for new referrals.
               </p>
             </div>
             <Switch id="sms-alerts" defaultChecked />
           </div>
 
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <Label htmlFor="email-digests" className="text-sm font-medium">
+          <div className="flex items-center justify-between gap-4 pt-2 border-t border-border">
+            <div className="flex-1 pt-2">
+              <Label htmlFor="email-digests" className="text-sm font-medium text-foreground">
                 Email digests
               </Label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground/90 mt-1 leading-relaxed">
                 Receive a daily summary of pending referrals.
               </p>
             </div>

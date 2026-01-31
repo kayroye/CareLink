@@ -1,4 +1,4 @@
-# ReferralLoop Design Document
+# CareLink Design Document
 
 **Date:** 2026-01-30
 **Project:** Spark 2026 Hackathon - Clearwater Ridge Healthcare Coordination
@@ -8,7 +8,7 @@
 
 ## Overview
 
-ReferralLoop is an offline-first Progressive Web App (PWA) for tracking patient referrals in remote communities where connectivity is unreliable. The app enables healthcare workers to create, track, and manage referrals even during network outages, with automatic sync when connectivity returns.
+CareLink is an offline-first Progressive Web App (PWA) for tracking patient referrals in remote communities where connectivity is unreliable. The app enables healthcare workers to create, track, and manage referrals even during network outages, with automatic sync when connectivity returns.
 
 **Core Problem:** The Clearwater Ridge cardiac incident—a missed referral that led to a preventable emergency airlift—happened because referrals fall into a "black hole" with no tracking or accountability.
 
@@ -182,7 +182,7 @@ const FACILITIES = [
 - "This happened because a referral fell into a black hole."
 
 ### [1:00-2:30] Solution Introduction
-> "ReferralLoop is an offline-first referral tracking system."
+> "CareLink is an offline-first referral tracking system."
 
 - Show dashboard with Kanban board
 - Point out: "Every referral has a status. Nothing gets lost."
@@ -213,7 +213,7 @@ const FACILITIES = [
 ### [6:00-7:00] Impact & Close
 - Budget: fits $60K first-year, <$25K ongoing
 - "Every missed referral costs $200. Every airlift costs $15,000."
-- "ReferralLoop ensures no patient falls through the cracks."
+- "CareLink ensures no patient falls through the cracks."
 
 ---
 

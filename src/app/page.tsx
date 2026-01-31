@@ -35,7 +35,7 @@ export default function Home() {
           <span className="text-white text-2xl font-bold">R</span>
         </div>
         <Loader2 className="h-6 w-6 animate-spin text-accent" />
-        <p className="text-muted-foreground text-sm">Loading ReferralLoop...</p>
+        <p className="text-muted-foreground text-sm">Loading CareLink...</p>
       </div>
     </div>
   );

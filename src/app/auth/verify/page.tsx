@@ -117,7 +117,7 @@ export default function VerifyMagicLinkPage() {
           <div className="w-12 h-12 rounded-xl bg-linear-to-br from-teal-400 to-teal-600 flex items-center justify-center shadow-lg">
             <span className="text-white text-xl font-bold">R</span>
           </div>
-          <h1 className="heading-2 text-foreground">ReferralLoop</h1>
+          <h1 className="heading-2 text-foreground">CareLink</h1>
         </div>
 
         <Suspense fallback={<LoadingFallback />}>

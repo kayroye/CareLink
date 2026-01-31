@@ -98,7 +98,7 @@ export default function LoginPage() {
           <div className="w-12 h-12 rounded-xl bg-linear-to-br from-teal-400 to-teal-600 flex items-center justify-center shadow-lg">
             <span className="text-white text-xl font-bold">R</span>
           </div>
-          <h1 className="heading-2 text-foreground">ReferralLoop</h1>
+          <h1 className="heading-2 text-foreground">CareLink</h1>
         </div>
 
         {/* Tagline */}
@@ -284,7 +284,7 @@ export default function LoginPage() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@referralloop.com"
+                    placeholder="you@CareLink.com"
                     className="h-11"
                     required
                     disabled={loading}
@@ -332,7 +332,7 @@ export default function LoginPage() {
 
               <div className="mt-6 pt-4 border-t border-border">
                 <p className="text-xs text-foreground/60 text-center">
-                  Demo: Use any email ending in @referralloop.com, @hospital.com, or @clinic.com with any password
+                  Demo: Use any email ending in @CareLink.com, @hospital.com, or @clinic.com with any password
                 </p>
               </div>
             </div>

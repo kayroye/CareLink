@@ -1,6 +1,6 @@
 import { User } from '../db/schema';
 
-const SESSION_KEY = 'referralloop_session';
+const SESSION_KEY = 'CareLink_session';
 
 /**
  * Hash a password using PBKDF2 with crypto.subtle
