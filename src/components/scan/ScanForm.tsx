@@ -57,6 +57,28 @@ export function ScanForm() {
     toast.error(error);
   };
 
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Remove all non-numeric characters
+    const digits = e.target.value.replace(/\D/g, '');
+    
+    // Limit to 10 digits
+    const limitedDigits = digits.slice(0, 10);
+    
+    // Format with dashes: XXX-XXX-XXXX
+    let formatted = '';
+    if (limitedDigits.length > 0) {
+      formatted = limitedDigits.slice(0, 3);
+      if (limitedDigits.length > 3) {
+        formatted += '-' + limitedDigits.slice(3, 6);
+      }
+      if (limitedDigits.length > 6) {
+        formatted += '-' + limitedDigits.slice(6, 10);
+      }
+    }
+    
+    setValue('patientPhone', formatted);
+  };
+
   const onSubmit = async (data: FormData) => {
     try {
       await addReferral({
@@ -98,8 +120,10 @@ export function ScanForm() {
                 <Label htmlFor="patientPhone">Phone Number</Label>
                 <Input
                   id="patientPhone"
-                  {...register('patientPhone')}
-                  placeholder="(555) 123-4567"
+                  type="tel"
+                  value={watch('patientPhone')}
+                  onChange={handlePhoneChange}
+                  placeholder="555-123-4567"
                 />
               </div>
             </div>
