@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { FACILITIES, FacilityId, Referral } from '@/lib/db/schema';
 import { AddToCalendarButton } from '@/components/appointments/AddToCalendarButton';
 
-interface AppointmentCardProps {
+export interface AppointmentCardProps {
   id: string;
   referralType: string;
   facilityId: FacilityId;
@@ -31,6 +31,9 @@ export function AppointmentCard({
 }: AppointmentCardProps) {
   const [isConfirming, setIsConfirming] = useState(false);
   const [confirmed, setConfirmed] = useState(isConfirmed);
+  const rescheduleRequested = Boolean(
+    (referral as Referral & { rescheduleRequested?: boolean } | undefined)?.rescheduleRequested
+  );
 
   const facility = FACILITIES.find((f) => f.id === facilityId);
   const date = new Date(appointmentDate);
@@ -139,7 +142,7 @@ export function AppointmentCard({
 
           {referral && <AddToCalendarButton className="w-full h-12 text-base" referral={referral} />}
 
-          {!confirmed && (
+          {!confirmed && !rescheduleRequested && (
             <Button
               variant="outline"
               onClick={handleReschedule}
@@ -147,6 +150,12 @@ export function AppointmentCard({
             >
               Request Reschedule
             </Button>
+          )}
+
+          {rescheduleRequested && (
+            <div className="w-full text-center text-sm font-medium rounded-lg border border-pending-muted bg-pending-muted text-pending-foreground px-4 py-3">
+              Reschedule requested — please await a phone call.
+            </div>
           )}
         </div>
       </CardContent>

@@ -19,7 +19,8 @@ export default function AppointmentsPage() {
   const [confirmationOpen, setConfirmationOpen] = useState(false);
   const [, setConfirmedAppointment] = useState<string | null>(null);
   const [rescheduleModalOpen, setRescheduleModalOpen] = useState(false);
-  const [, setSelectedReferralId] = useState<string | null>(null);
+  const [selectedReferralId, setSelectedReferralId] = useState<string | null>(null);
+  const [rescheduleRequestedIds, setRescheduleRequestedIds] = useState<Set<string>>(new Set());
 
   // Filter to only scheduled referrals with appointment dates
   const scheduledAppointments = referrals.filter(
@@ -45,8 +46,10 @@ export default function AppointmentsPage() {
   };
 
   const handleSubmitReschedule = async () => {
+    if (!selectedReferralId) return;
     // In a real app, this would submit the reschedule request
     await new Promise((resolve) => setTimeout(resolve, 1000));
+    setRescheduleRequestedIds((prev) => new Set(prev).add(selectedReferralId));
     setRescheduleModalOpen(false);
     setSelectedReferralId(null);
   };
@@ -108,19 +111,26 @@ export default function AppointmentsPage() {
 
           {/* Appointment Cards */}
           <div className="space-y-6">
-            {scheduledAppointments.map((appointment) => (
-              <AppointmentCard
-                key={appointment.id}
-                id={appointment.id}
-                referralType={appointment.referralType}
-                facilityId={appointment.facilityId}
-                appointmentDate={appointment.appointmentDate!}
-                referral={appointment}
-                onConfirm={handleConfirm}
-                onRequestReschedule={handleRequestReschedule}
-                isConfirmed={confirmedIds.has(appointment.id)}
-              />
-            ))}
+            {scheduledAppointments.map((appointment) => {
+              const appointmentWithReschedule = {
+                ...appointment,
+                rescheduleRequested: rescheduleRequestedIds.has(appointment.id),
+              };
+
+              return (
+                <AppointmentCard
+                  key={appointment.id}
+                  id={appointment.id}
+                  referralType={appointment.referralType}
+                  facilityId={appointment.facilityId}
+                  appointmentDate={appointment.appointmentDate!}
+                  referral={appointmentWithReschedule}
+                  onConfirm={handleConfirm}
+                  onRequestReschedule={handleRequestReschedule}
+                  isConfirmed={confirmedIds.has(appointment.id)}
+                />
+              );
+            })}
           </div>
         </div>
       )}
@@ -180,7 +190,7 @@ export default function AppointmentsPage() {
               </Button>
               <Button
                 onClick={handleSubmitReschedule}
-                className="flex-1 h-12 text-lg bg-accent hover:bg-accent/90"
+                className="flex-1 h-12 text-lg bg-destructive hover:bg-destructive/90"
               >
                 Request Reschedule
               </Button>
