@@ -30,7 +30,7 @@ interface NavItem {
 const nurseNavItems: NavItem[] = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/scan', label: 'New Referral', icon: Plus },
-  { href: '/settings', label: 'Settings', icon: Settings },
+  { href: '/nurse-settings', label: 'Settings', icon: Settings },
 ];
 
 interface SidebarProps {

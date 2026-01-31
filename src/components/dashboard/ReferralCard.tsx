@@ -35,7 +35,7 @@ export function ReferralCard({ referral, isDragging: isDraggingOverlay }: Referr
     <Card
       className={`
         cursor-pointer card-elevated bg-card
-        ${isOverdue ? 'border-destructive border-2 card-overdue' : 'border-transparent'}
+        ${isOverdue ? 'border-destructive border-2 card-overdue' : 'border-border'}
         ${isDragging ? 'opacity-50 shadow-lg' : ''}
         ${isDraggingOverlay ? 'shadow-2xl border-interactive border-2' : ''}
       `}
@@ -43,10 +43,10 @@ export function ReferralCard({ referral, isDragging: isDraggingOverlay }: Referr
       <CardHeader className="pb-2 pt-4">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <h3 className="font-semibold text-[15px] leading-tight tracking-tight truncate">
+            <h3 className="font-semibold text-[15px] leading-tight tracking-tight truncate text-foreground">
               {referral.patientName}
             </h3>
-            <p className="text-sm text-muted-foreground mt-0.5">{referral.referralType}</p>
+            <p className="text-sm text-muted-foreground/90 dark:text-muted-foreground mt-0.5">{referral.referralType}</p>
           </div>
           <div className="flex items-center gap-1.5 shrink-0">
             {!isDraggingOverlay && (
@@ -73,15 +73,15 @@ export function ReferralCard({ referral, isDragging: isDraggingOverlay }: Referr
       </CardHeader>
       <CardContent className="pb-4">
         <div className="space-y-3">
-          <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+          <p className="text-sm text-muted-foreground/90 dark:text-muted-foreground line-clamp-2 leading-relaxed">
             {referral.diagnosis}
           </p>
 
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground/80 dark:text-muted-foreground">
             <MapPin className="h-3 w-3 shrink-0" />
             <span className="truncate">{facility?.name}</span>
-            <span className="text-muted-foreground/60">·</span>
-            <span className="font-medium text-foreground/70">{facility?.distance}</span>
+            <span className="text-muted-foreground/50 dark:text-muted-foreground/60">·</span>
+            <span className="font-medium text-foreground/80 dark:text-foreground/90">{facility?.distance}</span>
           </div>
 
           <div className="flex items-center gap-2 pt-1">
