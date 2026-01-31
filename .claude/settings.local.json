@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nAdd ReferralLoop design document\n\nComprehensive design for offline-first referral tracking PWA including:\n- Tech stack \\(Next.js 16, RxDB, Groq Vision, Twilio\\)\n- Data model with facility presets\n- Key features: OCR, stale alerts, QR wallet, ICS, SMS\n- 4-phase implementation plan with parallel agent strategy\n- 7-minute demo script\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+    ]
+  }
+}
