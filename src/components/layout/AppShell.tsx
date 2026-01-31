@@ -6,7 +6,7 @@ import { AppSidebar } from './Sidebar';
 import { BottomNav } from './BottomNav';
 import { Header } from './Header';
 import { useAuth } from '@/contexts/AuthContext';
-import { SidebarProvider, SidebarInset, SidebarTrigger } from '@/components/ui/sidebar';
+import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 
 interface AppShellProps {
   children: ReactNode;
@@ -45,9 +45,7 @@ export function AppShell({ children }: AppShellProps) {
     <SidebarProvider defaultOpen={true}>
       <AppSidebar />
       <SidebarInset>
-        <Header>
-          <SidebarTrigger className="md:flex hidden" />
-        </Header>
+        <Header />
         <main className="flex-1 pb-20 md:pb-0">{children}</main>
       </SidebarInset>
 

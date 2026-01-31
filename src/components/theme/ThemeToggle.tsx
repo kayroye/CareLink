@@ -30,7 +30,7 @@ export function ThemeToggle({ compact = false, className }: ThemeToggleProps) {
 
   if (compact) {
     return (
-      <div className={cn('flex items-center justify-center gap-1', className)}>
+      <div className={cn('flex flex-col items-center justify-center gap-1', className)}>
         <button
           onClick={() => setTheme('light')}
           className={cn(

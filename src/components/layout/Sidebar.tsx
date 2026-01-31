@@ -17,6 +17,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
+  SidebarTrigger,
   useSidebar,
 } from '@/components/ui/sidebar';
 
@@ -53,13 +54,20 @@ export function AppSidebar({ navItems: navItemsProp }: SidebarProps) {
   return (
     <ShadcnSidebar collapsible="icon">
       <SidebarHeader>
-        <div className="flex items-center gap-2 px-2 py-2">
-          <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center shadow-sm shrink-0">
-            <span className="text-white text-sm font-bold">R</span>
+        <div className="flex items-center justify-between px-2 py-2">
+          <div className="flex items-center gap-2">
+            {/* Show logo in expanded state, trigger button in collapsed state */}
+            <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center shadow-sm shrink-0 group-data-[collapsible=icon]:hidden">
+              <span className="text-white text-sm font-bold">R</span>
+            </div>
+            <div className="hidden group-data-[collapsible=icon]:block">
+              <SidebarTrigger />
+            </div>
+            <span className="text-lg font-bold text-sidebar-foreground group-data-[collapsible=icon]:hidden">
+              ReferralLoop
+            </span>
           </div>
-          <span className="text-lg font-bold text-sidebar-foreground group-data-[collapsible=icon]:hidden">
-            ReferralLoop
-          </span>
+          <SidebarTrigger className="group-data-[collapsible=icon]:hidden" />
         </div>
       </SidebarHeader>
 
