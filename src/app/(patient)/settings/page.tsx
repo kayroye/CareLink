@@ -42,16 +42,27 @@ export default function SettingsPage() {
     }
   }, []);
 
-  // Apply text size to document
-  useEffect(() => {
+  // Apply text size to document only when saved
+  const applyTextSize = (size: TextSize) => {
     const root = document.documentElement;
     root.classList.remove('text-size-default', 'text-size-large', 'text-size-extra-large');
-    root.classList.add(`text-size-${textSize}`);
-  }, [textSize]);
+    root.classList.add(`text-size-${size}`);
+  };
+
+  // Load and apply saved text size on mount
+  useEffect(() => {
+    const savedTextSize = localStorage.getItem('patientTextSize') as TextSize;
+    if (savedTextSize) {
+      applyTextSize(savedTextSize);
+    }
+  }, []);
 
   const handleSave = () => {
     localStorage.setItem('patientTextSize', textSize);
     localStorage.setItem('patientSmsReminders', String(smsReminders));
+    
+    // Apply text size when saved
+    applyTextSize(textSize);
 
     setIsSaved(true);
     setTimeout(() => setIsSaved(false), 2000);
@@ -150,52 +161,69 @@ export default function SettingsPage() {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          {TEXT_SIZE_OPTIONS.map((option) => (
-            <Button
-              key={option.value}
-              onClick={() => handleTextSizeChange(option.value)}
-              className={cn(
-                'w-full p-4 rounded-lg border-2 text-left transition-all',
-                'hover:border-accent hover:bg-scheduled-muted',
-                textSize === option.value
-                  ? 'border-accent bg-scheduled-muted'
-                  : 'border-border bg-card'
-              )}
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p
-                    className={cn(
-                      'font-semibold text-foreground',
-                      option.value === 'default' && 'text-base',
-                      option.value === 'large' && 'text-lg',
-                      option.value === 'extra-large' && 'text-xl'
-                    )}
-                  >
-                    {option.label}
-                  </p>
-                  <p className="text-base text-muted-foreground">{option.description}</p>
-                </div>
-                {textSize === option.value && (
-                  <CheckCircle className="h-6 w-6 text-accent" />
+          <div className="grid grid-cols-3 gap-3">
+            {TEXT_SIZE_OPTIONS.map((option) => (
+              <button
+                key={option.value}
+                onClick={() => handleTextSizeChange(option.value)}
+                className={cn(
+                  'relative flex flex-col items-center p-4 rounded-xl border-2 transition-all duration-200',
+                  'hover:border-accent/50 hover:shadow-md',
+                  'focus:outline-none focus:ring-2 focus:ring-accent/50',
+                  textSize === option.value
+                    ? 'border-accent bg-scheduled-muted shadow-md'
+                    : 'border-border bg-card hover:bg-muted/50'
                 )}
-              </div>
-
-              {/* Preview Text */}
-              <div className="mt-3 p-3 bg-muted rounded">
-                <p
-                  className={cn(
-                    'text-foreground',
-                    option.value === 'default' && 'text-base',
-                    option.value === 'large' && 'text-lg',
-                    option.value === 'extra-large' && 'text-xl'
-                  )}
-                >
-                  This is how your text will look.
+              >
+                {/* Size indicator */}
+                <div className={cn(
+                  'flex items-center justify-center w-14 h-14 rounded-full mb-3 transition-all',
+                  textSize === option.value
+                    ? 'bg-accent text-white'
+                    : 'bg-muted text-muted-foreground'
+                )}>
+                  <span className={cn(
+                    'font-bold',
+                    option.value === 'default' && 'text-lg',
+                    option.value === 'large' && 'text-xl',
+                    option.value === 'extra-large' && 'text-2xl'
+                  )}>
+                    Aa
+                  </span>
+                </div>
+                
+                {/* Label */}
+                <p className={cn(
+                  'font-semibold text-foreground mb-1',
+                  option.value === 'default' && 'text-sm',
+                  option.value === 'large' && 'text-base',
+                  option.value === 'extra-large' && 'text-lg'
+                )}>
+                  {option.label}
                 </p>
-              </div>
-            </Button>
-          ))}
+                
+                {/* Check indicator */}
+                {textSize === option.value && (
+                  <div className="absolute top-2 right-2">
+                    <CheckCircle className="h-5 w-5 text-accent" />
+                  </div>
+                )}
+              </button>
+            ))}
+          </div>
+          
+          {/* Live Preview */}
+          <div className="mt-6 p-4 bg-muted/50 rounded-xl border border-border">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2 font-medium">Preview</p>
+            <p className={cn(
+              'text-foreground transition-all duration-200',
+              textSize === 'default' && 'text-base',
+              textSize === 'large' && 'text-lg',
+              textSize === 'extra-large' && 'text-xl'
+            )}>
+              This is how your text will appear throughout the app. Appointments, referrals, and notifications will all use this size.
+            </p>
+          </div>
         </CardContent>
       </Card>
 

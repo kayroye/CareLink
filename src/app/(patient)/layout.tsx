@@ -40,6 +40,16 @@ export default function PatientLayout({
     }
   }, [isAuthenticated, isPatient, loading, router]);
 
+  // Apply saved text size on initial load
+  useEffect(() => {
+    const savedTextSize = localStorage.getItem('patientTextSize');
+    if (savedTextSize) {
+      const root = document.documentElement;
+      root.classList.remove('text-size-default', 'text-size-large', 'text-size-extra-large');
+      root.classList.add(`text-size-${savedTextSize}`);
+    }
+  }, []);
+
   // Show loading state while checking auth
   if (loading) {
     return (
