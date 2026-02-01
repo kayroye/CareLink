@@ -4,6 +4,7 @@ import { useReferrals } from '@/lib/db/hooks';
 import { KanbanColumn } from './KanbanColumn';
 import { ReferralWithMeta, Status } from '@/lib/db/schema';
 import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Database, Trash2 } from 'lucide-react';
 import { useSeed } from '@/lib/db/use-seed';
 import { toast } from 'sonner';
@@ -28,10 +29,13 @@ const columns: { title: string; status: Status; statuses?: Status[] }[] = [
   { title: 'Missed / Cancelled', status: 'missed', statuses: ['missed', 'cancelled'] },
 ];
 
+type PendingSort = 'priority' | 'timeliness';
+
 export function KanbanBoard() {
   const { referrals, loading, updateStatus } = useReferrals();
   const { seed, clear, isSeeding } = useSeed();
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [pendingSort, setPendingSort] = useState<PendingSort>('priority');
   const [pendingMove, setPendingMove] = useState<{
     referral: ReferralWithMeta;
     newStatus: Status;
@@ -124,15 +128,29 @@ export function KanbanBoard() {
       )}
 
       {referrals.length > 0 && (
-        <div className="flex justify-end gap-2">
-          <Button onClick={handleClear} disabled={isSeeding} variant="outline" size="sm">
-            <Trash2 className="mr-2 h-4 w-4" />
-            Clear Data
-          </Button>
-          <Button onClick={handleSeed} disabled={isSeeding} variant="outline" size="sm">
-            <Database className="mr-2 h-4 w-4" />
-            Reset Demo Data
-          </Button>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center justify-between gap-3 rounded-md border border-border bg-background px-3 py-2 shadow-xs dark:bg-input/30 dark:border-input">
+            <span className="text-sm font-medium text-muted-foreground">Pending sort</span>
+            <Select value={pendingSort} onValueChange={(value) => setPendingSort(value as PendingSort)}>
+              <SelectTrigger size="sm">
+                <SelectValue placeholder="Sort" />
+              </SelectTrigger>
+              <SelectContent align="end">
+                <SelectItem value="priority">Priority</SelectItem>
+                <SelectItem value="timeliness">Timeliness</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button onClick={handleClear} disabled={isSeeding} variant="outline" size="sm">
+              <Trash2 className="mr-2 h-4 w-4" />
+              Clear Data
+            </Button>
+            <Button onClick={handleSeed} disabled={isSeeding} variant="outline" size="sm">
+              <Database className="mr-2 h-4 w-4" />
+              Reset Demo Data
+            </Button>
+          </div>
         </div>
       )}
 
@@ -151,6 +169,8 @@ export function KanbanBoard() {
               referrals={referrals.filter((r) =>
                 column.statuses ? column.statuses.includes(r.status) : r.status === column.status
               )}
+              pendingSort={column.status === 'pending' ? pendingSort : undefined}
+              onPendingSortChange={column.status === 'pending' ? setPendingSort : undefined}
             />
           ))}
         </div>

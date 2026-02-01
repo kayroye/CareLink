@@ -1,6 +1,6 @@
 'use client';
 
-import { ReferralWithMeta, Status } from '@/lib/db/schema';
+import { Priority, ReferralWithMeta, Status } from '@/lib/db/schema';
 import { ReferralCard } from './ReferralCard';
 import { Clock, Calendar, CheckCircle2, XCircle } from 'lucide-react';
 import { useDroppable } from '@dnd-kit/core';
@@ -9,6 +9,8 @@ interface KanbanColumnProps {
   title: string;
   status: Status;
   referrals: ReferralWithMeta[];
+  pendingSort?: 'priority' | 'timeliness';
+  onPendingSortChange?: (value: 'priority' | 'timeliness') => void;
 }
 
 const columnConfig: Record<Status, {
@@ -55,19 +57,37 @@ const columnConfig: Record<Status, {
   },
 };
 
-export function KanbanColumn({ title, status, referrals }: KanbanColumnProps) {
+export function KanbanColumn({
+  title,
+  status,
+  referrals,
+  pendingSort,
+  onPendingSortChange,
+}: KanbanColumnProps) {
   const config = columnConfig[status];
   const { setNodeRef, isOver } = useDroppable({
     id: status,
   });
 
-  // Sort overdue referrals to top for pending column
+  const priorityRank: Record<Priority, number> = {
+    critical: 4,
+    high: 3,
+    medium: 2,
+    low: 1,
+  };
+
   const sortedReferrals = [...referrals].sort((a, b) => {
-    if (status === 'pending') {
-      const aOverdue = a.isOverdue;
-      const bOverdue = b.isOverdue;
-      if (aOverdue && !bOverdue) return -1;
-      if (!aOverdue && bOverdue) return 1;
+    if (status === 'pending' && pendingSort) {
+      if (pendingSort === 'priority') {
+        const priorityDiff = priorityRank[b.priority] - priorityRank[a.priority];
+        if (priorityDiff !== 0) return priorityDiff;
+        return b.daysSinceCreated - a.daysSinceCreated;
+      }
+      if (pendingSort === 'timeliness') {
+        const timelinessDiff = b.daysSinceCreated - a.daysSinceCreated;
+        if (timelinessDiff !== 0) return timelinessDiff;
+        return priorityRank[b.priority] - priorityRank[a.priority];
+      }
     }
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
