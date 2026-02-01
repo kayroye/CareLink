@@ -290,15 +290,15 @@
   }
   
   .card-overdue {
-    animation: pulse-overdue 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation: overdue-border 1.6s ease-in-out infinite;
   }
   
-  @keyframes pulse-overdue {
+  @keyframes overdue-border {
     0%, 100% {
-      opacity: 1;
+      border-color: rgba(239, 68, 68, 1);
     }
     50% {
-      opacity: 0.9;
+      border-color: rgba(239, 68, 68, 0.25);
     }
   }
   

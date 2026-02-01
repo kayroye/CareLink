@@ -137,7 +137,7 @@ export function KanbanBoard() {
               </SelectTrigger>
               <SelectContent align="end">
                 <SelectItem value="priority">Priority</SelectItem>
-                <SelectItem value="timeliness">Timeliness</SelectItem>
+                <SelectItem value="timeliness">Latest to Earliest</SelectItem>
               </SelectContent>
             </Select>
           </div>

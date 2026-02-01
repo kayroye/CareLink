@@ -135,10 +135,12 @@ export default function ReferralDetailPage() {
             <User className="h-5 w-5 text-accent mt-0.5" />
             <div>
               <p className="text-sm text-muted-foreground">Your Care Coordinator</p>
-              <p className="text-base font-medium text-foreground">{nurse?.name ?? 'Care Team'}</p>
-              {nurse?.phone && (
-                <p className="text-sm text-muted-foreground">{nurse.phone}</p>
-              )}
+              <p className="text-base font-medium text-foreground">
+                {nurse?.name ?? 'Demo Nurse, RN'}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {nurse?.phone ?? '(867) 555-4021'}
+              </p>
             </div>
           </div>
 
