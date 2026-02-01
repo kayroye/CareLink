@@ -51,6 +51,13 @@ export function ScanForm() {
     toast.error(error);
   };
 
+  const generateMeetLink = () => {
+    const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+    const makePart = (length: number) =>
+      Array.from({ length }, () => alphabet[Math.floor(Math.random() * alphabet.length)]).join('');
+    return `https://meet.google.com/${makePart(3)}-${makePart(4)}-${makePart(3)}`;
+  };
+
   const handlePatientSelect = useCallback(
     (patient: Patient | undefined) => {
       if (patient) {
@@ -162,9 +169,27 @@ export function ScanForm() {
                 name="patientSummary"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-sm font-medium text-foreground">
-                      Patient Summary *
-                    </FormLabel>
+                    <div className="flex items-center justify-between gap-2">
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Patient Summary *
+                      </FormLabel>
+                      {facilityId === 'online' && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            const link = generateMeetLink();
+                            const separator = field.value?.trim() ? '\n\n' : '';
+                            form.setValue('patientSummary', `${field.value || ''}${separator}Meet link: ${link}`, {
+                              shouldValidate: true,
+                            });
+                          }}
+                        >
+                          Generate meet link
+                        </Button>
+                      )}
+                    </div>
                     <p className="text-xs text-muted-foreground mb-2">
                       This is what the patient will see. Use simple, non-medical language.
                     </p>

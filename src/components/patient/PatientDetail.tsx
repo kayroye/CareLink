@@ -46,6 +46,13 @@ export function PatientDetail({ referralId }: PatientDetailProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
+  const generateMeetLink = () => {
+    const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+    const makePart = (length: number) =>
+      Array.from({ length }, () => alphabet[Math.floor(Math.random() * alphabet.length)]).join('');
+    return `https://meet.google.com/${makePart(3)}-${makePart(4)}-${makePart(3)}`;
+  };
+
   const toDateTimeLocal = (value?: string) => {
     if (!value) return '';
     const date = new Date(value);
@@ -329,7 +336,26 @@ export function PatientDetail({ referralId }: PatientDetailProps) {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="editPatientSummary">Patient Summary</Label>
+                <div className="flex items-center justify-between gap-2">
+                  <Label htmlFor="editPatientSummary">Patient Summary</Label>
+                  {editValues.facilityId === 'online' && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        const link = generateMeetLink();
+                        const separator = editValues.patientSummary?.trim() ? '\n\n' : '';
+                        setEditValues((prev) => ({
+                          ...prev,
+                          patientSummary: `${prev.patientSummary || ''}${separator}Meet link: ${link}`,
+                        }));
+                      }}
+                    >
+                      Generate meet link
+                    </Button>
+                  )}
+                </div>
                 <Textarea
                   id="editPatientSummary"
                   value={editValues.patientSummary}

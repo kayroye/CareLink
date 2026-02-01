@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { useTheme } from '@/components/theme';
 import { useAuth } from '@/contexts/AuthContext';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { toast } from 'sonner';
 
 type TextSize = 'default' | 'large' | 'extra-large';
 
@@ -22,11 +23,23 @@ const TEXT_SIZE_OPTIONS: { value: TextSize; label: string; description: string }
 export default function SettingsPage() {
   const [textSize, setTextSize] = useState<TextSize>('default');
   const [smsReminders, setSmsReminders] = useState(true);
-  const [isSaved, setIsSaved] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
   const { logout } = useAuth();
   const router = useRouter();
+  const saveToastTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showSavedToast = () => {
+    if (saveToastTimeout.current) {
+      clearTimeout(saveToastTimeout.current);
+    }
+    saveToastTimeout.current = setTimeout(() => {
+      toast('Saved', {
+        duration: 1200,
+        icon: <CheckCircle className="h-4 w-4 text-completed-foreground" />,
+      });
+    }, 200);
+  };
 
   const handleLogout = () => {
     logout();
@@ -36,6 +49,11 @@ export default function SettingsPage() {
   // Avoid hydration mismatch for theme
   useEffect(() => {
     setTimeout(() => setMounted(true), 0);
+    return () => {
+      if (saveToastTimeout.current) {
+        clearTimeout(saveToastTimeout.current);
+      }
+    };
   }, []);
 
   // Load settings from localStorage on mount
@@ -51,38 +69,23 @@ export default function SettingsPage() {
     }
   }, []);
 
-  // Apply text size to document only when saved
-  const applyTextSize = (size: TextSize) => {
+  // Apply text size to document
+  useEffect(() => {
     const root = document.documentElement;
     root.classList.remove('text-size-default', 'text-size-large', 'text-size-extra-large');
-    root.classList.add(`text-size-${size}`);
-  };
-
-  // Load and apply saved text size on mount
-  useEffect(() => {
-    const savedTextSize = localStorage.getItem('patientTextSize') as TextSize;
-    if (savedTextSize) {
-      applyTextSize(savedTextSize);
-    }
-  }, []);
-
-  const handleSave = () => {
-    localStorage.setItem('patientTextSize', textSize);
-    localStorage.setItem('patientSmsReminders', String(smsReminders));
-    
-    // Apply text size when saved
-    applyTextSize(textSize);
-
-    setIsSaved(true);
-    setTimeout(() => setIsSaved(false), 2000);
-  };
+    root.classList.add(`text-size-${textSize}`);
+  }, [textSize]);
 
   const handleTextSizeChange = (size: TextSize) => {
     setTextSize(size);
+    localStorage.setItem('patientTextSize', size);
+    showSavedToast();
   };
 
   const handleSmsToggle = (checked: boolean) => {
     setSmsReminders(checked);
+    localStorage.setItem('patientSmsReminders', String(checked));
+    showSavedToast();
   };
 
   return (
@@ -265,28 +268,6 @@ export default function SettingsPage() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Save Button */}
-      <div className="flex justify-end">
-        <Button
-          onClick={handleSave}
-          className={cn(
-            'h-14 px-8 text-lg font-semibold transition-all',
-            isSaved
-              ? 'bg-completed-foreground hover:bg-completed-foreground/90'
-              : 'bg-accent hover:bg-accent/90'
-          )}
-        >
-          {isSaved ? (
-            <>
-              <CheckCircle className="h-5 w-5 mr-2" />
-              Saved
-            </>
-          ) : (
-            'Save Settings'
-          )}
-        </Button>
-      </div>
 
       {/* Help Section */}
       <Card className="bg-background border-border">

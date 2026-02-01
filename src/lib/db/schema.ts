@@ -55,6 +55,13 @@ export const magicLinkTokenSchema: RxJsonSchema<MagicLinkToken> = {
 
 export const FACILITIES = [
   {
+    id: 'online',
+    name: 'Online',
+    address: 'Virtual visit',
+    distance: 'Online',
+    types: ['Virtual Care'],
+  },
+  {
     id: 'regional-hospital',
     name: 'Regional Hospital',
     address: '1020 Riverside Dr, Thunder Bay, ON',
