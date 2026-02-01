@@ -2,11 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Plus } from 'lucide-react';
+import { LayoutDashboard, Plus, Settings } from 'lucide-react';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/scan', label: 'New Referral', icon: Plus },
+  { href: '/nurse-settings', label: 'Settings', icon: Settings },
 ];
 
 export function BottomNav() {

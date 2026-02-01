@@ -1,7 +1,46 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyMagicLink } from '@/lib/auth/magic-link';
 
-// Simple ID generator for demo
+// Demo patients with hardcoded IDs (must match seed-data.ts and login/route.ts)
+const DEMO_PATIENTS: Record<string, { id: string; name: string; email: string }> = {
+  'margaret@patient.demo': {
+    id: 'demo-patient-margaret',
+    name: 'Margaret Thompson',
+    email: 'margaret@patient.demo',
+  },
+  'james@patient.demo': {
+    id: 'demo-patient-james',
+    name: 'James Whitehorse',
+    email: 'james@patient.demo',
+  },
+  'sarah@patient.demo': {
+    id: 'demo-patient-sarah',
+    name: 'Sarah Running Bear',
+    email: 'sarah@patient.demo',
+  },
+  'robert@patient.demo': {
+    id: 'demo-patient-robert',
+    name: 'Robert Chen',
+    email: 'robert@patient.demo',
+  },
+  'emily@patient.demo': {
+    id: 'demo-patient-emily',
+    name: 'Emily Blackwood',
+    email: 'emily@patient.demo',
+  },
+  'william@patient.demo': {
+    id: 'demo-patient-william',
+    name: 'William Frost',
+    email: 'william@patient.demo',
+  },
+  'dorothy@patient.demo': {
+    id: 'demo-patient-dorothy',
+    name: 'Dorothy Clearsky',
+    email: 'dorothy@patient.demo',
+  },
+};
+
+// Simple ID generator for non-demo patients
 function generateId(): string {
   return `patient_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 }
@@ -24,14 +63,34 @@ export async function GET(request: NextRequest) {
       }, { status: 401 });
     }
 
-    // Create a user object from the verified token
-    const user = {
-      id: generateId(),
-      email: result.email,
-      name: result.name,
-      role: 'patient' as const,
-      createdAt: new Date().toISOString(),
-    };
+    const normalizedEmail = result.email.toLowerCase().trim();
+
+    // Check if this is a demo patient
+    const demoPatient = DEMO_PATIENTS[normalizedEmail];
+
+    const user = demoPatient
+      ? {
+          id: demoPatient.id,
+          email: demoPatient.email,
+          name: demoPatient.name,
+          role: 'patient' as const,
+          createdAt: new Date().toISOString(),
+        }
+      : {
+          id: generateId(),
+          email: result.email,
+          name: result.name,
+          role: 'patient' as const,
+          createdAt: new Date().toISOString(),
+        };
+
+    console.log('=================================');
+    console.log('MAGIC LINK VERIFIED');
+    console.log(`Email: ${normalizedEmail}`);
+    console.log(`Is demo patient: ${!!demoPatient}`);
+    console.log(`User ID: ${user.id}`);
+    console.log(`User Name: ${user.name}`);
+    console.log('=================================');
 
     return NextResponse.json({
       success: true,

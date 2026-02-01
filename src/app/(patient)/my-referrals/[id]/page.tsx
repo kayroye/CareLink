@@ -1,26 +1,52 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { Calendar, ChevronLeft, MapPin } from 'lucide-react';
-import { useReferrals } from '@/lib/db/hooks';
+import { Calendar, ChevronLeft, MapPin, CalendarX, RefreshCw, User } from 'lucide-react';
+import { useReferrals, useUser } from '@/lib/db/hooks';
 import { FACILITIES } from '@/lib/db/schema';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { RequestModal } from '@/components/patient/RequestModal';
+import { toast } from 'sonner';
 
 const STATUS_LABELS: Record<string, { label: string; tone: string }> = {
   pending: { label: 'Awaiting Scheduling', tone: 'bg-pending-muted text-pending-foreground' },
   scheduled: { label: 'Appointment Scheduled', tone: 'bg-scheduled-muted text-scheduled-foreground' },
   completed: { label: 'Completed', tone: 'bg-completed-muted text-completed-foreground' },
   missed: { label: 'Missed - Please Contact Us', tone: 'bg-missed-muted text-missed-foreground' },
+  cancelled: { label: 'Cancelled', tone: 'bg-muted text-muted-foreground' },
 };
 
 export default function ReferralDetailPage() {
   const params = useParams<{ id: string }>();
-  const { referrals, loading } = useReferrals();
+  const { referrals, loading, submitRequest } = useReferrals();
+  const [requestType, setRequestType] = useState<'reschedule' | 'cancel' | null>(null);
+
   const referral = referrals.find((item) => item.id === params.id);
   const facility = referral ? FACILITIES.find((item) => item.id === referral.facilityId) : null;
-  const nursePhone = '1 (705) 555-0199';
+  const { user: nurse } = useUser(referral?.createdByNurseId);
+
+  const canRequest = referral?.status === 'scheduled' && !referral.pendingRequest;
+  const hasPendingRequest = !!referral?.pendingRequest;
+
+  const handleSubmitRequest = async (requestedDate?: string, reason?: string) => {
+    if (!referral || !requestType) return;
+
+    try {
+      await submitRequest(referral.id, requestType, requestedDate, reason);
+      toast.success(
+        requestType === 'reschedule'
+          ? 'Reschedule request submitted. A nurse will contact you.'
+          : 'Cancellation request submitted. A nurse will review it.'
+      );
+      setRequestType(null);
+    } catch {
+      toast.error('Failed to submit request. Please try again.');
+    }
+  };
 
   if (loading) {
     return (
@@ -74,22 +100,46 @@ export default function ReferralDetailPage() {
 
           <Badge className={`text-sm px-3 py-1 ${statusInfo.tone}`}>{statusInfo.label}</Badge>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Diagnosis</p>
-              <p className="text-base text-foreground">{referral.diagnosis}</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Facility Address</p>
-              <p className="text-base text-foreground">
-                {facility?.address ?? 'Address not available'}
+          {/* Pending Request Notice */}
+          {hasPendingRequest && referral.pendingRequest && (
+            <div className="p-4 bg-scheduled-muted rounded-lg border border-scheduled-muted">
+              <p className="font-medium text-scheduled-foreground">
+                {referral.pendingRequest.type === 'reschedule'
+                  ? 'Reschedule Request Pending'
+                  : 'Cancellation Request Pending'}
+              </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                Submitted{' '}
+                {new Date(referral.pendingRequest.requestedAt).toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                })}
+                . A nurse will review your request soon.
               </p>
             </div>
+          )}
+
+          {/* About Your Referral - Patient-friendly summary */}
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-muted-foreground">About Your Referral</p>
+            <p className="text-base text-foreground">{referral.patientSummary}</p>
           </div>
 
           <div className="space-y-1">
-            <p className="text-sm text-muted-foreground">Nurse Contact</p>
-            <p className="text-base text-foreground">{nursePhone}</p>
+            <p className="text-sm text-muted-foreground">Facility Address</p>
+            <p className="text-base text-foreground">{facility?.address ?? 'Address not available'}</p>
+          </div>
+
+          {/* Care Coordinator */}
+          <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-lg">
+            <User className="h-5 w-5 text-accent mt-0.5" />
+            <div>
+              <p className="text-sm text-muted-foreground">Your Care Coordinator</p>
+              <p className="text-base font-medium text-foreground">{nurse?.name ?? 'Care Team'}</p>
+              {nurse?.phone && (
+                <p className="text-sm text-muted-foreground">{nurse.phone}</p>
+              )}
+            </div>
           </div>
 
           {referral.appointmentDate && (
@@ -103,20 +153,46 @@ export default function ReferralDetailPage() {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit',
                   })}
                 </p>
               </div>
             </div>
           )}
 
-          {referral.notes && (
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Notes</p>
-              <p className="text-base text-foreground whitespace-pre-line">{referral.notes}</p>
+          {/* Request Buttons */}
+          {canRequest && (
+            <div className="grid gap-3 sm:grid-cols-2 pt-2">
+              <Button
+                variant="outline"
+                className="gap-2"
+                onClick={() => setRequestType('reschedule')}
+              >
+                <RefreshCw className="h-4 w-4" />
+                Request Reschedule
+              </Button>
+              <Button
+                variant="outline"
+                className="gap-2 border-destructive/50 text-destructive hover:bg-destructive/10"
+                onClick={() => setRequestType('cancel')}
+              >
+                <CalendarX className="h-4 w-4" />
+                Request Cancellation
+              </Button>
             </div>
           )}
         </CardContent>
       </Card>
+
+      {/* Request Modal */}
+      <RequestModal
+        open={requestType !== null}
+        onOpenChange={(open) => !open && setRequestType(null)}
+        type={requestType ?? 'reschedule'}
+        currentDate={referral.appointmentDate}
+        onSubmit={handleSubmitRequest}
+      />
     </div>
   );
 }

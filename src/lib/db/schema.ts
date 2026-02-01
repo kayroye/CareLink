@@ -9,6 +9,7 @@ export interface User {
   name: string;
   role: UserRole;
   passwordHash?: string; // Only for nurses
+  phone?: string; // Contact number for nurses, displayed to patients
   createdAt: string;
 }
 
@@ -21,7 +22,7 @@ export interface MagicLinkToken {
 }
 
 export const userSchema: RxJsonSchema<User> = {
-  version: 0,
+  version: 1,
   primaryKey: 'id',
   type: 'object',
   properties: {
@@ -30,6 +31,7 @@ export const userSchema: RxJsonSchema<User> = {
     name: { type: 'string' },
     role: { type: 'string', enum: ['nurse', 'patient'] },
     passwordHash: { type: 'string' },
+    phone: { type: 'string' },
     createdAt: { type: 'string' },
   },
   required: ['id', 'email', 'name', 'role', 'createdAt'],
@@ -82,9 +84,58 @@ export const FACILITIES = [
   },
 ] as const;
 
-export type FacilityId = typeof FACILITIES[number]['id'];
+export type FacilityId = (typeof FACILITIES)[number]['id'];
 export type Priority = 'low' | 'medium' | 'high' | 'critical';
-export type Status = 'pending' | 'scheduled' | 'completed' | 'missed';
+export type Status = 'pending' | 'scheduled' | 'completed' | 'missed' | 'cancelled';
+
+// Patient types
+export type PreferredLanguage = 'en' | 'fr' | 'cree' | 'ojibwe';
+export type CommunicationPreference = 'sms' | 'email' | 'both';
+
+export interface Patient {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  dateOfBirth?: string;
+  healthCardNumber?: string;
+  preferredLanguage: PreferredLanguage;
+  preferredFacilityId?: FacilityId;
+  communicationPreference: CommunicationPreference;
+  address?: string;
+  emergencyContactName?: string;
+  emergencyContactPhone?: string;
+  accessibilityNeeds?: string;
+  passwordHash?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export const patientSchema: RxJsonSchema<Patient> = {
+  version: 0,
+  primaryKey: 'id',
+  type: 'object',
+  properties: {
+    id: { type: 'string', maxLength: 100 },
+    name: { type: 'string', maxLength: 200 },
+    email: { type: 'string', maxLength: 320 },
+    phone: { type: 'string' },
+    dateOfBirth: { type: 'string' },
+    healthCardNumber: { type: 'string' },
+    preferredLanguage: { type: 'string', enum: ['en', 'fr', 'cree', 'ojibwe'] },
+    preferredFacilityId: { type: 'string' },
+    communicationPreference: { type: 'string', enum: ['sms', 'email', 'both'] },
+    address: { type: 'string' },
+    emergencyContactName: { type: 'string' },
+    emergencyContactPhone: { type: 'string' },
+    accessibilityNeeds: { type: 'string' },
+    passwordHash: { type: 'string' },
+    createdAt: { type: 'string' },
+    updatedAt: { type: 'string' },
+  },
+  required: ['id', 'name', 'email', 'preferredLanguage', 'communicationPreference', 'createdAt', 'updatedAt'],
+  indexes: ['email', 'name'],
+};
 
 export interface StatusChangeNote {
   fromStatus: string;
@@ -94,11 +145,21 @@ export interface StatusChangeNote {
   wasOverdue: boolean;
 }
 
+export interface PendingRequest {
+  type: 'reschedule' | 'cancel';
+  requestedDate?: string;
+  reason?: string;
+  requestedAt: string;
+}
+
 export interface Referral {
   id: string;
+  patientId: string;
   patientName: string;
   patientPhone?: string;
   diagnosis: string;
+  patientSummary: string; // Patient-friendly explanation (shown to patients)
+  createdByNurseId: string; // Links to nurse who created the referral
   priority: Priority;
   status: Status;
   facilityId: FacilityId;
@@ -109,6 +170,7 @@ export interface Referral {
   updatedAt: string;
   isSynced: boolean;
   statusChangeNotes?: StatusChangeNote[];
+  pendingRequest?: PendingRequest;
 }
 
 export type ReferralWithMeta = Referral & {
@@ -117,16 +179,19 @@ export type ReferralWithMeta = Referral & {
 };
 
 export const referralSchema: RxJsonSchema<Referral> = {
-  version: 0,
+  version: 1,
   primaryKey: 'id',
   type: 'object',
   properties: {
     id: { type: 'string', maxLength: 100 },
+    patientId: { type: 'string', maxLength: 100 },
     patientName: { type: 'string' },
     patientPhone: { type: 'string' },
     diagnosis: { type: 'string' },
+    patientSummary: { type: 'string' },
+    createdByNurseId: { type: 'string', maxLength: 100 },
     priority: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] },
-    status: { type: 'string', enum: ['pending', 'scheduled', 'completed', 'missed'] },
+    status: { type: 'string', enum: ['pending', 'scheduled', 'completed', 'missed', 'cancelled'] },
     facilityId: { type: 'string' },
     referralType: { type: 'string' },
     appointmentDate: { type: 'string' },
@@ -147,6 +212,15 @@ export const referralSchema: RxJsonSchema<Referral> = {
         },
       },
     },
+    pendingRequest: {
+      type: 'object',
+      properties: {
+        type: { type: 'string', enum: ['reschedule', 'cancel'] },
+        requestedDate: { type: 'string' },
+        reason: { type: 'string' },
+        requestedAt: { type: 'string' },
+      },
+    },
   },
-  required: ['id', 'patientName', 'diagnosis', 'priority', 'status', 'facilityId', 'referralType', 'createdAt', 'updatedAt', 'isSynced'],
+  required: ['id', 'patientId', 'patientName', 'diagnosis', 'patientSummary', 'createdByNurseId', 'priority', 'status', 'facilityId', 'referralType', 'createdAt', 'updatedAt', 'isSynced'],
 };

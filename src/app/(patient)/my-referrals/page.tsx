@@ -1,6 +1,7 @@
 'use client';
 
 import { useReferrals } from '@/lib/db/hooks';
+import { useAuth } from '@/contexts/AuthContext';
 import { ReferralCard } from '@/components/patient/ReferralCard';
 import { Card, CardContent } from '@/components/ui/card';
 import { FileText, Loader2 } from 'lucide-react';
@@ -8,11 +9,18 @@ import { useRouter } from 'next/navigation';
 
 export default function MyReferralsPage() {
   const router = useRouter();
+  const { user } = useAuth();
   const { referrals, loading } = useReferrals();
 
-  // In a real app, we would filter referrals by the logged-in patient
-  // For now, we show all referrals as demo data
-  const patientReferrals = referrals;
+  // Debug logging
+  console.log('=== MY REFERRALS DEBUG ===');
+  console.log('User ID:', user?.id);
+  console.log('Total referrals:', referrals.length);
+  console.log('Referral patientIds:', referrals.map(r => ({ id: r.id, patientId: r.patientId, name: r.patientName })));
+
+  // Filter referrals by the logged-in patient's ID
+  const patientReferrals = referrals.filter((r) => r.patientId === user?.id);
+  console.log('Filtered referrals:', patientReferrals.length);
 
   if (loading) {
     return (

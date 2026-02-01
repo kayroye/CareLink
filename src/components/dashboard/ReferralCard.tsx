@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Clock, CheckCircle2, MapPin, AlertCircle, GripVertical } from 'lucide-react';
+import { Clock, CheckCircle2, MapPin, AlertCircle, GripVertical, Bell } from 'lucide-react';
 import { ReferralWithMeta, FACILITIES } from '@/lib/db/schema';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
@@ -88,6 +88,12 @@ export function ReferralCard({ referral, isDragging: isDraggingOverlay }: Referr
             <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs ${priorityStyles[referral.priority]}`}>
               {referral.priority}
             </span>
+            {referral.pendingRequest && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs bg-scheduled-muted text-scheduled-foreground font-semibold">
+                <Bell className="h-3 w-3" />
+                Request
+              </span>
+            )}
             {isOverdue && (
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs bg-destructive text-destructive-foreground font-semibold uppercase tracking-wide">
                 <AlertCircle className="h-3 w-3" />

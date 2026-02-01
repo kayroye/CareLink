@@ -1,12 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
-import { Type, Bell, CheckCircle, Palette, Sun, Moon, Monitor } from 'lucide-react';
+import { Type, Bell, CheckCircle, Palette, Sun, Moon, Monitor, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTheme } from '@/components/theme';
+import { useAuth } from '@/contexts/AuthContext';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 type TextSize = 'default' | 'large' | 'extra-large';
@@ -23,6 +25,13 @@ export default function SettingsPage() {
   const [isSaved, setIsSaved] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+  const { logout } = useAuth();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout();
+    router.push('/login');
+  };
 
   // Avoid hydration mismatch for theme
   useEffect(() => {
@@ -290,6 +299,30 @@ export default function SettingsPage() {
             </a>{' '}
             and we will be happy to help.
           </p>
+        </CardContent>
+      </Card>
+
+      {/* Logout Section */}
+      <Card className="bg-card border-border">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-lg bg-destructive/10 flex items-center justify-center">
+                <LogOut className="h-6 w-6 text-destructive" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-foreground">Log Out</h3>
+                <p className="text-base text-muted-foreground">Sign out of your account</p>
+              </div>
+            </div>
+            <Button
+              onClick={handleLogout}
+              variant="outline"
+              className="h-12 px-6 text-base font-medium border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive"
+            >
+              Log Out
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>

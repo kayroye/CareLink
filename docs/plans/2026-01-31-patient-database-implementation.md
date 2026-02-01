@@ -6,7 +6,7 @@
 
 **Architecture:** Client-side RxDB syncs bidirectionally with CouchDB. Nurses have full read/write, patients have read + request-only writes. Fuzzy matching via Fuse.js connects OCR-extracted names to existing patients.
 
-**Tech Stack:** RxDB, CouchDB, Fuse.js, React Hook Form, Radix UI Dialog, Next.js API routes
+**Tech Stack:** RxDB, CouchDB, Fuse.js, React Hook Form, Shadcn UI Dialog, Next.js API routes
 
 ---
 

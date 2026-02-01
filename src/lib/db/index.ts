@@ -2,29 +2,37 @@ import { createRxDatabase, RxDatabase, RxCollection, removeRxDatabase } from 'rx
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
 import { addRxPlugin } from 'rxdb/plugins/core';
 import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv';
+import { RxDBMigrationSchemaPlugin } from 'rxdb/plugins/migration-schema';
 import {
   Referral,
   referralSchema,
   User,
   userSchema,
   MagicLinkToken,
-  magicLinkTokenSchema
+  magicLinkTokenSchema,
+  Patient,
+  patientSchema,
 } from './schema';
 
 type ReferralCollection = RxCollection<Referral>;
 type UserCollection = RxCollection<User>;
 type MagicLinkTokenCollection = RxCollection<MagicLinkToken>;
+type PatientCollection = RxCollection<Patient>;
 
 interface DatabaseCollections {
   referrals: ReferralCollection;
   users: UserCollection;
   magicLinkTokens: MagicLinkTokenCollection;
+  patients: PatientCollection;
 }
 
 type CareLinkDatabase = RxDatabase<DatabaseCollections>;
 
 let dbPromise: Promise<CareLinkDatabase> | null = null;
 let devModePluginPromise: Promise<void> | null = null;
+
+// Add migration plugin
+addRxPlugin(RxDBMigrationSchemaPlugin);
 
 const DB_NAME = 'carelink';
 
@@ -48,17 +56,36 @@ async function initDatabase(): Promise<CareLinkDatabase> {
   const db = await createRxDatabase<DatabaseCollections>({
     name: DB_NAME,
     storage,
+    ignoreDuplicate: isDev, // Allow hot reload in development
   });
 
   await db.addCollections({
     referrals: {
       schema: referralSchema,
+      migrationStrategies: {
+        // v0 -> v1: Add patientSummary and createdByNurseId
+        1: (oldDoc: Record<string, unknown>) => ({
+          ...oldDoc,
+          patientSummary: oldDoc.patientSummary || 'Please contact your care coordinator for details.',
+          createdByNurseId: oldDoc.createdByNurseId || 'demo-nurse-sarah',
+        }),
+      },
     },
     users: {
       schema: userSchema,
+      migrationStrategies: {
+        // v0 -> v1: Add phone field
+        1: (oldDoc: Record<string, unknown>) => ({
+          ...oldDoc,
+          phone: oldDoc.phone || undefined,
+        }),
+      },
     },
     magicLinkTokens: {
       schema: magicLinkTokenSchema,
+    },
+    patients: {
+      schema: patientSchema,
     },
   });
 
@@ -69,9 +96,11 @@ export async function getDatabase(): Promise<CareLinkDatabase> {
   if (dbPromise) return dbPromise;
 
   dbPromise = initDatabase().catch(async (error) => {
-    // Check if this is a schema mismatch error (DB6)
-    if (error?.code === 'DB6' || error?.message?.includes('DB6')) {
-      console.warn('Schema mismatch detected. Resetting database for demo...');
+    // Check if this is a schema mismatch error (DB6) or migration error (COL12)
+    const isSchemaError = error?.code === 'DB6' || error?.message?.includes('DB6') ||
+                          error?.code === 'COL12' || error?.message?.includes('COL12');
+    if (isSchemaError) {
+      console.warn('Schema/migration error detected. Resetting database for demo...');
 
       // Remove the old database
       try {
@@ -105,4 +134,4 @@ export async function getDatabase(): Promise<CareLinkDatabase> {
   return dbPromise;
 }
 
-export type { CareLinkDatabase, ReferralCollection, UserCollection, MagicLinkTokenCollection };
+export type { CareLinkDatabase, ReferralCollection, UserCollection, MagicLinkTokenCollection, PatientCollection };

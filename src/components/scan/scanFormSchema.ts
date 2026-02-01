@@ -1,9 +1,10 @@
 import { z } from 'zod';
 import { FACILITIES } from '@/lib/db/schema';
 
-const facilityIds = FACILITIES.map((facility) => facility.id);
+const facilityIds = FACILITIES.map((facility) => facility.id) as string[];
 
 export const scanFormSchema = z.object({
+  patientId: z.string().min(1, 'Patient is required'),
   patientName: z.string().trim().min(1, 'Patient name is required'),
   patientPhone: z
     .string()
@@ -11,6 +12,7 @@ export const scanFormSchema = z.object({
     .optional()
     .or(z.literal('')),
   diagnosis: z.string().trim().min(1, 'Diagnosis is required'),
+  patientSummary: z.string().trim().min(1, 'Patient summary is required'),
   priority: z.enum(['low', 'medium', 'high', 'critical']),
   facilityId: z
     .string()
@@ -34,9 +36,11 @@ export type ScanFormOcrData = Partial<
 >;
 
 export const scanFormDefaults: ScanFormData = {
+  patientId: '',
   patientName: '',
   patientPhone: '',
   diagnosis: '',
+  patientSummary: '',
   priority: 'medium',
   facilityId: '',
   referralType: '',

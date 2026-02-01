@@ -46,6 +46,13 @@ const columnConfig: Record<Status, {
     countBg: 'bg-missed text-white dark:bg-missed/80',
     titleClass: 'text-missed-foreground',
   },
+  cancelled: {
+    borderColor: 'border-t-missed',
+    headerClass: 'column-header-missed',
+    icon: <XCircle className="h-4 w-4 text-missed-foreground" />,
+    countBg: 'bg-missed text-white dark:bg-missed/80',
+    titleClass: 'text-missed-foreground',
+  },
 };
 
 export function KanbanColumn({ title, status, referrals }: KanbanColumnProps) {

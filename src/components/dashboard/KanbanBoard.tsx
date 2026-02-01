@@ -21,11 +21,11 @@ import { useState } from 'react';
 import { ReferralCard } from './ReferralCard';
 import { OverdueConfirmDialog } from './OverdueConfirmDialog';
 
-const columns: { title: string; status: Status }[] = [
+const columns: { title: string; status: Status; statuses?: Status[] }[] = [
   { title: 'Pending', status: 'pending' },
   { title: 'Scheduled', status: 'scheduled' },
   { title: 'Completed', status: 'completed' },
-  { title: 'Missed', status: 'missed' },
+  { title: 'Missed / Cancelled', status: 'missed', statuses: ['missed', 'cancelled'] },
 ];
 
 export function KanbanBoard() {
@@ -148,7 +148,9 @@ export function KanbanBoard() {
               key={column.status}
               title={column.title}
               status={column.status}
-              referrals={referrals.filter((r) => r.status === column.status)}
+              referrals={referrals.filter((r) =>
+                column.statuses ? column.statuses.includes(r.status) : r.status === column.status
+              )}
             />
           ))}
         </div>

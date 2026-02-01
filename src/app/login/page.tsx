@@ -95,9 +95,11 @@ export default function LoginPage() {
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-12 relative z-10">
         {/* Logo */}
         <div className="mb-8 flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-linear-to-br from-teal-400 to-teal-600 flex items-center justify-center shadow-lg">
-            <span className="text-white text-xl font-bold">R</span>
-          </div>
+          <img 
+            src="/icon.png" 
+            alt="ReferralLoop Logo" 
+            className="w-12 h-12 rounded-xl shadow-lg"
+          />
           <h1 className="heading-2 text-foreground">CareLink</h1>
         </div>
 

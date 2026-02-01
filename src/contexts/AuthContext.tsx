@@ -10,6 +10,8 @@ import {
 } from 'react';
 import { User } from '@/lib/db/schema';
 import { getSession, createSession, clearSession } from '@/lib/auth';
+import { getDatabase } from '@/lib/db';
+import { startSync, stopSync } from '@/lib/db/sync';
 
 interface AuthContextType {
   user: User | null;
@@ -28,14 +30,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Start sync for user
+  const initSync = useCallback(async (userRole: 'nurse' | 'patient') => {
+    try {
+      const db = await getDatabase();
+      await startSync(db, userRole);
+      console.log(`Sync started for ${userRole}`);
+    } catch (error) {
+      console.error('Failed to start sync:', error);
+    }
+  }, []);
+
   // Initialize from localStorage on mount
   useEffect(() => {
     const storedUser = getSession();
     if (storedUser) {
       setUser(storedUser);
+      // Start sync for existing session
+      initSync(storedUser.role);
     }
     setLoading(false);
-  }, []);
+  }, [initSync]);
 
   const login = useCallback(async (email: string, password?: string) => {
     setLoading(true);
@@ -57,10 +72,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const loggedInUser = data.user as User;
       setUser(loggedInUser);
       createSession(loggedInUser);
+      // Start sync after login
+      initSync(loggedInUser.role);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [initSync]);
 
   const loginWithMagicLink = useCallback(async (token: string) => {
     setLoading(true);
@@ -75,12 +92,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const loggedInUser = data.user as User;
       setUser(loggedInUser);
       createSession(loggedInUser);
+      // Start sync after magic link login
+      initSync(loggedInUser.role);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [initSync]);
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    // Stop sync before clearing session
+    await stopSync();
+    console.log('Sync stopped');
+
     setUser(null);
     clearSession();
 

@@ -15,7 +15,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid email format' }, { status: 400 });
     }
 
-    const { token, url } = generateMagicLink(email);
+    // Get base URL from request headers (works on localhost and LAN)
+    const protocol = request.headers.get('x-forwarded-proto') || 'https';
+    const host = request.headers.get('host') || 'localhost:3000';
+    const baseUrl = `${protocol}://${host}`;
+
+    const { token, url } = generateMagicLink(email, baseUrl);
 
     // For demo purposes, log the magic link to console
     console.log('=================================');

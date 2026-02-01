@@ -58,9 +58,10 @@ function decodeToken(token: string): TokenPayload | null {
 /**
  * Generate a magic link for passwordless authentication
  * @param email - The email address to send the magic link to
+ * @param baseUrl - The base URL for the magic link (from request headers)
  * @returns The token and full URL for the magic link
  */
-export function generateMagicLink(email: string): { token: string; url: string } {
+export function generateMagicLink(email: string, baseUrl?: string): { token: string; url: string } {
   const now = Date.now();
   const exp = now + MAGIC_LINK_EXPIRY_MINUTES * 60 * 1000;
 
@@ -72,9 +73,9 @@ export function generateMagicLink(email: string): { token: string; url: string }
 
   const token = encodeToken(payload);
 
-  // In development, use localhost. In production, use the actual domain.
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-  const url = `${baseUrl}/auth/verify?token=${encodeURIComponent(token)}`;
+  // Use provided baseUrl, or fall back to env var, or default to localhost
+  const finalBaseUrl = baseUrl || process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const url = `${finalBaseUrl}/auth/verify?token=${encodeURIComponent(token)}`;
 
   return { token, url };
 }

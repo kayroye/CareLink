@@ -1,0 +1,15 @@
+services:
+  couchdb:
+    image: couchdb:3
+    container_name: couchdb
+    ports:
+      - "0.0.0.0:5984:5984"
+    environment:
+      COUCHDB_USER: carelink-admin
+      COUCHDB_PASSWORD: secure-password1
+    volumes:
+      - couchdb_data:/opt/couchdb/data
+      - ./couchdb.ini:/opt/couchdb/etc/local.d/cors.ini
+
+volumes:
+  couchdb_data:

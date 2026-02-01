@@ -19,7 +19,8 @@
       "mcp__plugin_playwright_playwright__browser_wait_for",
       "Bash(git ls-files:*)",
       "Bash(git merge feature/referral-loop -m \"$\\(cat <<''EOF''\nMerge feature/referral-loop: Complete ReferralLoop hackathon app\n\nOffline-first referral tracking system for rural healthcare.\n\nFeatures:\n- Kanban board for referral status tracking\n- Groq Vision OCR for scanning paper referrals\n- QR code \"Smart Wallet\" for patient data portability\n- ICS calendar file generation for appointments\n- Twilio SMS reminders\n- Network toggle to simulate offline mode\n- Stale alerts \\(14+ days = overdue\\)\n- Polished medical/clinical UI\n\nTech: Next.js 16, RxDB, shadcn/ui, Tailwind CSS\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
-      "Bash(git worktree:*)"
+      "Bash(git worktree:*)",
+      "Bash(find:*)"
     ]
   }
 }

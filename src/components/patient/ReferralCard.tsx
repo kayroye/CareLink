@@ -40,6 +40,12 @@ const STATUS_CONFIG: Record<Status, { label: string; step: number; color: string
     color: 'text-missed-foreground',
     bgColor: 'bg-missed-muted',
   },
+  cancelled: {
+    label: 'Cancelled',
+    step: 2,
+    color: 'text-muted-foreground',
+    bgColor: 'bg-muted',
+  },
 };
 
 function getStatusStep(status: Status): number {
@@ -58,6 +64,8 @@ function getNextAction(status: Status, appointmentDate?: string): string {
       return 'Your referral has been completed. Thank you!';
     case 'missed':
       return 'You missed your scheduled appointment. Please request a callback to reschedule.';
+    case 'cancelled':
+      return 'This referral has been cancelled. Please contact your provider if you need assistance.';
     default:
       return '';
   }
