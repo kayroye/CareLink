@@ -4,6 +4,12 @@
 
 CareLink is a Progressive Web Application (PWA) designed for healthcare coordination in remote Canadian communities. Built for the Spark 2026 Hackathon, it addresses the challenge of tracking patient referrals in areas with unreliable internet connectivity.
 
+## Built For
+
+**WDS Spark 2026 Hackathon** - Technology for Rural Healthcare Access (Clearwater Ridge)
+
+This project addresses the challenge of healthcare coordination in remote Canadian communities, where internet connectivity is unreliable and referrals to regional hospitals often get lost in paper-based/disconnected systems.
+
 ## The Problem
 
 Healthcare workers at Clearwater Ridge nursing station currently track referrals using paper forms, spreadsheets, and phone calls. Referrals often get "lost" in the system, leading to missed appointments and delayed care. Winter disruptions and geographical isolation make consistent communication with regional hospitals difficult.
@@ -163,45 +169,6 @@ npm run dev
 The app will be available at `https://localhost:3000` (HTTPS is required for PWA features).
 
 > **Note:** You may need to accept the self-signed certificate warning in your browser.
-
----
-
-## Cloud Database Setup
-
-For production or multi-device testing, you can use a cloud-hosted CouchDB instance.
-
-### Option 1: IBM Cloudant
-
-[IBM Cloudant](https://www.ibm.com/cloud/cloudant) offers a managed CouchDB service with a free tier.
-
-1. Create a Cloudant instance on IBM Cloud
-2. Get your credentials from the service dashboard
-3. Update `.env.local`:
-
-```bash
-COUCHDB_URL="https://your-account.cloudantnosqldb.appdomain.cloud"
-COUCHDB_USER="your-cloudant-apikey"
-COUCHDB_PASSWORD="your-cloudant-password"
-```
-
-4. Create databases via curl (replace URL with your Cloudant URL):
-
-```bash
-curl -X PUT https://your-apikey:password@your-account.cloudantnosqldb.appdomain.cloud/carelink_patients
-curl -X PUT https://your-apikey:password@your-account.cloudantnosqldb.appdomain.cloud/carelink_referrals
-curl -X PUT https://your-apikey:password@your-account.cloudantnosqldb.appdomain.cloud/carelink_users
-```
-
-### Option 2: Self-Hosted (VPS/Cloud VM)
-
-Deploy CouchDB on a VPS (DigitalOcean, AWS EC2, etc.):
-
-1. Install Docker on your server
-2. Copy `docker-compose.yml` and `couchdb.ini` to your server
-3. Run `docker-compose up -d`
-4. **Important:** Configure firewall to allow port 5984
-5. **Important:** Use strong credentials in production
-6. Initialize databases with curl commands (use your server's IP/domain)
 
 ---
 
@@ -418,13 +385,6 @@ docker-compose down -v
 - Clear browser IndexedDB storage
 - Refresh the page - demo data seeds automatically on first load
 
----
-
-## Built For
-
-**Spark 2026 Hackathon** - Technology for Rural Healthcare Access
-
-This project addresses the challenge of healthcare coordination in remote Canadian communities, where internet connectivity is unreliable and referrals to regional hospitals often get lost in paper-based systems.
 
 ---
 
