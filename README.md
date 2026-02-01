@@ -388,6 +388,11 @@ docker-compose down -v
 
 ---
 
+## Authors
+- Kalan Roye
+- Christopher Tela
+- Daimen Miller
+
 ## License
 
 MIT
