@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Loader2 } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Home() {
   const router = useRouter();
@@ -31,8 +32,8 @@ export default function Home() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="flex flex-col items-center gap-4">
-        <div className="w-16 h-16 rounded-xl bg-linear-to-br from-teal-400 to-teal-600 flex items-center justify-center shadow-lg">
-          <span className="text-white text-2xl font-bold">R</span>
+        <div className="w-16 h-16 rounded-xl overflow-hidden shadow-lg">
+          <Image src="/icon.png" alt="CareLink" width={64} height={64} priority />
         </div>
         <Loader2 className="h-6 w-6 animate-spin text-accent" />
         <p className="text-muted-foreground text-sm">Loading CareLink...</p>
